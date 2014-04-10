@@ -466,16 +466,24 @@ BODY{
 }
 #davinci_top_bar_main {
 	padding:0px; /* override dijitContentPane */
-	background: -webkit-linear-gradient(#464646, #121212);
-	background: -moz-linear-gradient(#464646, #121212);
-	background: -ms-linear-gradient(#464646, #121212);
-	background: -o-linear-gradient(#464646, #121212);
-	background: linear-gradient(#464646, #121212);
+  -moz-box-sizing: border-box;
+    background-image: -moz-linear-gradient(90deg, #2C2A29 0%, #32302F 100%);
+    border-bottom: 1px solid #111010;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.15) inset;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0 15px 0 8px;
+    text-shadow: 0 -1px 0 #1E1D1C;
+    width: 100%;
+    z-index: 2;
+	/*background: -moz-linear-gradient(#323A45, #121212);
+	background: -ms-linear-gradient(#323A45, #121212);
+	background: -o-linear-gradient(#323A45, #121212);
+	background: linear-gradient(#323A45, #121212);*/
 	color: #ccc;
     font: normal bold 12px Arial, sans-serif;
     text-shadow:none;
 	overflow: hidden;
-	height:44px;
+	height:40px;
 	line-height:44px;
 	text-align:center;
 }
@@ -485,6 +493,14 @@ BODY{
 	background-image: url(img/sprite.png);
 	background-position: 0 -18px;
 	background-repeat: repeat-x;
+}
+ .icon-panel-trigger:before {
+    background: url("img/sprite.svg") no-repeat scroll -220px 0 / 960px 560px rgba(0, 0, 0, 0);
+    height: 16px;
+    left: 0;
+    opacity: 1;
+    top: 8px;
+    width: 20px;
 }
 .maq_banner_name_box {
 	padding-left:10px;
@@ -574,14 +590,13 @@ davinci_top_bar .dijitButtonNode {
 	#davinci_file_tabs .dijitTabContainerBottom-tabs,
 	#davinci_file_tabs .dijitTabContainerLeft-tabs,
 	#davinci_file_tabs .dijitTabContainerRight-tabs {
-	border-color:transparent;
-	background: #F4F4F4;
-	border-bottom:none;
-	border-bottom: 1px solid #d2d2d2;
-	padding-left: 14px;
+	background-color: #333333;
+    background-image: linear-gradient(to bottom, #0274BE, #0274BE);
+    background-repeat: repeat-x;
+    color: #333333;
 }
 #davinci_file_tabs .dijitTab {
-	padding:12px 10px 13px;
+	ppadding:12px 10px 13px;
 	top:0px;
 	background:#f8f8f8;
 	color:#424242;

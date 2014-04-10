@@ -4,6 +4,7 @@
 	<extension id="dojoMetaData" point="org.eclipse.equinox.http.registry.resources">
 	        <resource alias="/maqetta/app/metadata/dojo/1.8" base-name="/WebContent/metadata" />
 	        <resource alias="/maqetta/app/static/lib/dojo/1.8" base-name="/WebContent/dojo"/>
+	        <resource alias="/maqetta/app/static/lib/weblab/1.8" base-name="/WebContent/weblab"/>
 	</extension>
 	
       <extension point="maqetta.core.server.ajaxLibrary">
@@ -14,6 +15,11 @@
         <ajaxLibrary name="dojo based themes" id="DojoThemes" version="1.8" required="true">
 	         <libraryPath location="WebContent/maqetta/themes" name="/themes"></libraryPath>
 	    </ajaxLibrary>
+	     <ajaxLibrary name="weblab" id="weblab" version="1.8">
+            <libraryPath location="WebContent/weblab" source="WebContent/weblab" name="/lib/weblab"></libraryPath>
+            <metadata location="app/metadata/dojo/1.8/weblab" />
+         </ajaxLibrary>
+         
       </extension>
       
 </plugin>

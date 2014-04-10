@@ -107,8 +107,7 @@ return declare("davinci.ve.palette.Palette", [WidgetBase, _KeyNavContainer], {
 		var $library = lib.$wm;
 		var widgets = lib.$wm.widgets;
 		var folderToShow = null;
-		for(var w=0; w<widgets.length; w++){
-			var item = widgets[w];
+		
 			for(var presetId in this._presetSections){
 				var customSection = null;
 				var sections = this._presetSections[presetId];
@@ -135,7 +134,11 @@ return declare("davinci.ve.palette.Palette", [WidgetBase, _KeyNavContainer], {
 							customSection._created = true;
 						}
 					}
+					for(var w=0; w<widgets.length; w++){
+						var item = widgets[w];
+						
 					var includesValue = 'type:' + item.type;
+					console.log("includesValue ="+includesValue);
 					if(customSection.includes.indexOf(includesValue) < 0){
 						customSection.includes.push(includesValue);
 						item.$library = $library;

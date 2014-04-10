@@ -4,7 +4,7 @@ Bundle-Name: maqetta.core.server
 Bundle-SymbolicName: maqetta.core.server;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.davinci.server.internal.Activator
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: javax.mail.internet;version="1.4.1",
  javax.servlet;version="[2.1.0,3.0.0)",
  javax.servlet.http;version="[2.1.0,3.0.0)",

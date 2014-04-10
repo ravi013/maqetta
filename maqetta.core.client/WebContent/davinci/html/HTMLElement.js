@@ -221,6 +221,7 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 			if (this.children[i].tag == tagName) {
 				return this.children[i];
 			}
+		return this;
 	},
 
 	hasAttribute: function(name) {

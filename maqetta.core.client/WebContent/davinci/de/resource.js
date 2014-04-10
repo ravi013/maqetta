@@ -46,7 +46,7 @@ define(["davinci/de/widgets/NewDijit",
 				    	//and all of the require/packages logic happens during application initialization.
 				    	//It might be possible to prevent the reload without too much work, but for now we
 				    	//do a browser refresh.
-				    	window.location.reload(false);
+				    	//window.location.reload(false);
 		    		});
 		    	}
 				return true;
@@ -111,9 +111,22 @@ define(["davinci/de/widgets/NewDijit",
 		},
 		
 		createDijit : function(widgetData, model, resource, context, selection){
-			var qualifiedWidgetDot = widgetData.name + "." + widgetData.name;
-			var qualifiedWidgetSlash = widgetData.name + "/" + widgetData.name;
-			
+			var widgetNameArry=widgetData.name.split('.');
+			var qualifiedWidgetDot = "";
+			var qualifiedWidgetSlash = "";
+			var widgetLib="";
+			if(widgetNameArry.length>1){
+			    for(var i=0;i<widgetNameArry.length;i++){
+			        qualifiedWidgetDot =qualifiedWidgetDot+ (i==0?"":".")+  widgetNameArry[i];
+			        qualifiedWidgetSlash =qualifiedWidgetSlash+(i==0?"":"/")+  widgetNameArry[i];
+			    }
+			    widgetData.name=widgetNameArry[widgetNameArry.length-1];
+			    widgetLib=widgetNameArry[0];
+			}else{
+			 qualifiedWidgetDot = widgetData.name + "." + widgetData.name;
+			 qualifiedWidgetSlash = widgetData.name + "/" + widgetData.name;
+			 widgetLib= widgetData.name;
+			}
 			var base = Workbench.getProject();
 			var prefs = Preferences.getPreferences('davinci.ui.ProjectPrefs',base);
 			if(!prefs.widgetFolder){
@@ -130,16 +143,25 @@ define(["davinci/de/widgets/NewDijit",
 				widgetSingleName = namesplit[namesplit.length-1];
 			}
 			*/
-			var customWidgets = widgetNamespace.getChildSync(widgetData.name + "_widgets.json");
+			var customWidgets = widgetNamespace.getChildSync(widgetLib+ "_widgets.json");
 			if(customWidgets==null){
-				customWidgets = widgetNamespace.createResource(widgetData.name +"_widgets.json");
+				customWidgets = widgetNamespace.createResource(widgetLib+"_widgets.json");
 			}
-			
 			/* packages.json metadata */
 			var customWidgetsJson = dojo.clone(dt.WIDGETS_JSON);
-			customWidgetsJson.name = widgetData.name;
-			customWidgetsJson.longName = widgetData.name;
+			//customWidgetsJson.name =widgetLib;
+			//customWidgetsJson.longName = widgetLib;
 			
+	
+			var currentContents=customWidgets.getContentSync();
+			if(currentContents){
+				var customExisWidgetsJson=	JSON.parse(currentContents);
+				if(customExisWidgetsJson){
+					customWidgetsJson=customExisWidgetsJson;
+					console.log("Setting exisitng custom widget");
+				}
+			}
+
 			var widgetsObj = {
 				name:widgetData.name, 
 				description: widgetData.name, 
@@ -158,7 +180,17 @@ define(["davinci/de/widgets/NewDijit",
 					widgetsObj.properties[att.name] = att.value;
 				}
 			}
-			customWidgetsJson.widgets.push(widgetsObj);
+			var isNewWidget=true;
+			for(var i=0;i<customWidgetsJson.widgets.length;i++){
+				if(customWidgetsJson.widgets[i].name==widgetsObj.name){
+					customWidgetsJson.widgets[i]=widgetsObj;
+					isNewWidget=false;
+					break;
+				}
+			}
+			if(isNewWidget)
+		    customWidgetsJson.widgets.push(widgetsObj);
+	
 			var promises = [customWidgets.setContents(JSON.stringify(customWidgetsJson, undefined, '\t'))];
 			var content = new DijitTemplatedGenerator({}).buildSource(model, qualifiedWidgetSlash, widgetData.name, false, context, selection);
 			

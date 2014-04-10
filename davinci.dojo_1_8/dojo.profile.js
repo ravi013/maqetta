@@ -64,6 +64,7 @@ dependencies = {
 		[ "dojox", "../dojox" ],
 		[ "system", "../system" ],
 		[ "preview", "../preview" ],
+		[ "weblab", "../weblab" ],
 		[ "orion", "../orion" ]
 	]
 }

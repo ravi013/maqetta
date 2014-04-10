@@ -278,7 +278,8 @@ getCustomWidgets: function(base) {
 								name: customModuleId,
 								location: metadataUrl,
 								descriptor: metadata
-						};
+						};break;
+						//FIXME temporary fix need to be updated poperly.
 					}
 				}
 			}

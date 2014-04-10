@@ -1,0 +1,38 @@
+{
+    "id": "http://dojotoolkit.org/weblab/widget/signin/signin",
+    "name": "weblab.widget.signin.signin",
+    "spec": "1.0",
+    "version": "1.0",
+    "require": [
+        {
+            "type": "javascript-module",
+            "format": "amd",
+            "src": "weblab/widget/signin/signin",
+            "$library": "weblab"
+        }
+    ],
+    "library": {
+        "dojo": {
+            "src": "../../../dojo/dojo.js"
+        },
+        "weblab": {
+            "src": "../../"
+        },
+    },
+    "property": {
+  
+    },
+    "content": "<div></div>",
+    "title": {
+        "type": "text/html",
+        "value": "<p>Basically the same thing as a normal HTML signin, but with special styling.</p>"
+    },
+    "description": {
+        "type": "text/html",
+        "value": "<p>signins can display a label, an icon, or both.\nA label should always be specified (through innerHTML) or the label\nattribute.  It can be hidden via showLabel=false.</p>"
+    },
+    "examples": {
+        "type": "text/html",
+        "value": "<pre><code>&lt;signin data-dojo-type=&quot;weblab/widget/signin/signin&quot; onClick=&quot;...&quot;&gt;Hello world&lt;/signin&gt;</code></pre>\n<pre><code>var signin1 = new signin({label: &quot;hello world&quot;, onClick: foo});\ndojo.body().appendChild(signin1.domNode);</code></pre>"
+    }
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Custom Widget</title>
+		<link rel="stylesheet" href="https://dojotoolkit.org/documentation/tutorials/resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="../widget/signin/css/signin.css" media="screen">
+        <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+	<body>
+    <div class="container">
+
+        <div data-dojo-type="weblab.widget.signin.signin" data-dojo-props="baseClass:'' " ></div>
+
+      </div>
+		<!-- Configure Dojo -->
+		<script>
+			// We're specifying our Dojo Configuration this way,
+			// as it's a bit more complex and easier to type out
+			// than a data-dojo-config string
+			 var dojoConfig = (function(){
+				var base = location.href.split("/");
+				base.pop();
+				base = base.join("/");
+				return {
+					async: true,
+					isDebug: true,
+                    parseOnLoad: true,
+                    has:{'dojo-firebug': true},
+					packages: [{
+						name: "weblab",
+						location: base + "../../../weblab"
+					}]
+				};
+			})();
+
+		</script>
+		<!-- load dojo -->
+        <script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.3/dojo/dojo.js.uncompressed.js"></script>
+
+    <script>
+        // Bring in our custom widget
+        require(["weblab/widget/signin/Signin"]
+        );
+    </script>
+	</body>
+</html>
