@@ -46,7 +46,7 @@ define(["davinci/de/widgets/NewDijit",
 				    	//and all of the require/packages logic happens during application initialization.
 				    	//It might be possible to prevent the reload without too much work, but for now we
 				    	//do a browser refresh.
-				    	//window.location.reload(false);
+				    	window.location.reload(false);
 		    		});
 		    	}
 				return true;

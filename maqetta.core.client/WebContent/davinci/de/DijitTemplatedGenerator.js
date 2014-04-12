@@ -23,7 +23,7 @@ define(["dojo/_base/declare",
 			/* no need to bother with the theme */
 			//var themeMetaobject = davinci.ve.metadata.loadThemeMeta(this._srcDocument);
 			var topElement = selection[0]._srcElement;
-			var htmlPath = simpleName + "/" + simpleName + ".html";
+			var htmlPath = dijitName + ".html";
 			
 			if(!inlineHtml){
 	        	this.value.amd.push("dojo/text!" + htmlPath.toString() );
