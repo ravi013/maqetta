@@ -62,12 +62,18 @@ lastMapTag=${mapsTagTag}
 	<target name="cloneMaqetta">
 			<property name='gitRepoFolder' value="${base}/gitClones/git___github_com_maqetta_maqetta_git"/>
 			<echo message="Fetching and Updating git submodule in ${gitRepoFolder}"/>
-		<mkdir dir="${gitRepoFolder}"/>
+			<delete>
+			<dirset dir="${gitRepoFolder}" />
+			 </delete>
+		 <mkdir dir="${gitRepoFolder}"/>
 		 <exec executable = "git" dir = "${gitRepoFolder}">
 			<arg value = "clone" />
-			<arg value = "git://github.com/maqetta/maqetta.git" />
+			<arg value = "git://github.com/ravi013/maqetta.git" />
 		 	<arg value = "${gitRepoFolder}" />
 		 </exec>
+		  <exec executable = "git" dir = "${gitRepoFolder}">
+			     <arg value = "pull" />
+			  </exec>
 		 <exec executable = "git" dir = "${gitRepoFolder}">
 			     <arg value = "submodule" />
 				 <arg value = "update" />

@@ -73,7 +73,7 @@ fi
 #
 # GitHub read-only URL for Maqetta repository. This should not change.
 #
-export gitRepository="${GIT_PROTOCOL}://github.com/maqetta/maqetta.git"
+export gitRepository="${GIT_PROTOCOL}://github.com/ravi013/maqetta.git"
 
 echo "Using ${baseLocation} Eclipse for build..."
 #
