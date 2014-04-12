@@ -8,14 +8,14 @@ rem Path to parent directory of the eclipse application directory.
 rem That is, if eclipse is installed in '/usr/local/eclipse', this property
 rem would be set as 'base="/usr/local"'. No trailing backslash.
 rem
-set base=C:\eclipse
+set base=J:\DEvelopment\eclipse-jee-juno-win32-x86_64\
 
 rem
 rem Path to eclipse directory inclusive. The application directory is
 rem usually, but not always, named 'eclipse'. It has sub-directories
 rem \configuration, \features, \plugins, etc. No trailing backslash.
 rem
-set baseLocation=%base%\eclipse-3.51-64bit
+set baseLocation=%base%\eclipse
 
 rem
 rem Version number of the launcher jar file. See %baseLocation%\plugins\org.eclipse.equinox.launcher_*.jar.
@@ -45,7 +45,7 @@ rem set maqettaCode=c:\your\local\eclipse\workspace
 rem
 rem GitHub URL for Maqetta repository. This should not change.
 rem
-set gitRepository=git@github.com:maqetta/maqetta.git
+set gitRepository=https://github.com/ravi013/maqetta.git
 
 rem
 rem Windowing System, Operating System and processor Architecture settings

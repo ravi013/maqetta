@@ -16,7 +16,7 @@ setProperties () {
 	#
 	# GitHub read-only URL for Maqetta repository. This should not change.
 	#
-	export gitRepository="${GIT_PROTOCOL}://github.com/maqetta/maqetta.git"
+	export gitRepository="${GIT_PROTOCOL}://github.com/ravi013/maqetta.git"
 	
 	#
 	# Directory in which to do the build. No trailing slash.
@@ -77,19 +77,19 @@ setProperties () {
 	timestamp=$date$time
 	buildDirectory=$writableBuildRoot/$buildType$timestamp
 	buildLabel=$buildType$date-$time
-	javaHome=/shared/common/sun-jdk1.6.0_21_x64
+	javaHome=$JAVA_HOME
 	#Properties for compilation boot classpaths
-	JAVA60_HOME=/Library/Java/Home
-	JAVA50_HOME=/Library/Java/Home
-	JAVA14_HOME=/Library/Java/Home
-	#j2se142="/Library/Java/Home/lib/dt.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/charsets.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsee.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/dt.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jce.jar:/System/Library/Frameworks/JavaVM.framework/Frameworks/JavaRuntimeSupport.framework/Resources/Java/JavaRuntimeSupport.jar"
-	j2se142="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jce.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsse.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/ui.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/alt-rt.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/alt-string.jar"
+	JAVA60_HOME=$JAVA_HOME
+	JAVA50_HOME=$JAVA_HOME
+	JAVA14_HOME=$JAVA_HOME
+	#j2se142="$JAVA_HOME/lib/dt.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/charsets.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsee.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/dt.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jce.jar:/System/Library/Frameworks/JavaVM.framework/Frameworks/JavaRuntimeSupport.framework/Resources/Java/JavaRuntimeSupport.jar"
+	#j2se142="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jce.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsse.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/ui.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/alt-rt.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/alt-string.jar"
 	
-	j2se150=${j2se142}
-	javase160=${j2se142}
+	#j2se150=${j2se142}
+	#javase160=${j2se142}
 	#j2se142="/Library/Java/Home/lib/dt.jar:/Library/Java/Home/lib/deploy.jar:/Library/Java/Home/lib/apple_provider.jar:"
-	#j2se150="$JAVA50_HOME/jre/lib/rt.jar:$JAVA50_HOME/jre/lib/jsse.jar:$JAVA50_HOME/jre/lib/jce.jar:$JAVA50_HOME/jre/lib/charsets.jar"
-	#javase160="$JAVA60_HOME/jre/lib/resources.jar:$JAVA60_HOME/jre/lib/rt.jar:$JAVA60_HOME/jre/lib/jsse.jar:$JAVA60_HOME/jre/lib/jce.jar:$JAVA60_HOME/jre/lib/charsets.jar"
+	j2se150="$JAVA50_HOME/jre/lib/rt.jar:$JAVA50_HOME/jre/lib/jsse.jar:$JAVA50_HOME/jre/lib/jce.jar:$JAVA50_HOME/jre/lib/charsets.jar"
+	javase160="$JAVA60_HOME/jre/lib/resources.jar:$JAVA60_HOME/jre/lib/rt.jar:$JAVA60_HOME/jre/lib/jsse.jar:$JAVA60_HOME/jre/lib/jce.jar:$JAVA60_HOME/jre/lib/charsets.jar"
 }
 
 
@@ -98,7 +98,7 @@ updateBaseBuilder () {
     if [ ! -d org.eclipse.releng.basebuilder_${basebuilderBranch} ]; then
         echo "[start - `date +%H\:%M\:%S`] Get org.eclipse.releng.basebuilder_${basebuilderBranch}"
         #cmd="git clone git://dev.eclipse.org/org.eclipse.releng/org.eclipse.releng.basebuilder.git -b ${basebuilderBranch} org.eclipse.releng.basebuilder_${basebuilderBranch}"
-        cmd="wget --no-verbose -O __bb.tar.gz http://git.eclipse.org/c/platform/eclipse.platform.releng.basebuilder.git/snapshot/${basebuilderBranch}.tar.gz"
+        #cmd="wget --no-verbose -O __bb.tar.gz http://git.eclipse.org/c/platform/eclipse.platform.releng.basebuilder.git/snapshot/${basebuilderBranch}.tar.gz"
         echo $cmd
         $cmd
         tar xpzf __bb.tar.gz
@@ -197,8 +197,7 @@ build() {
 				-DgitUser=$user \
 				-Ddeployment-type=${MAQETTA_DEPLOYMENT} \
 				-DdojoBuild=${MAQETTA_DOJO_BUILD}
-				$tagMaps $compareMaps $fetchTag $publish 
-				-DJ2SE-1.4=$j2se142 \
+				$tagMaps $compareMaps $fetchTag $publish 				
 				-DJ2SE-1.5=$j2se150 \
 				-DJavaSE-1.6=$javase160"
 	$cmd
