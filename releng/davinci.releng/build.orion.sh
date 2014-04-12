@@ -90,6 +90,7 @@ setProperties () {
 	#j2se142="/Library/Java/Home/lib/dt.jar:/Library/Java/Home/lib/deploy.jar:/Library/Java/Home/lib/apple_provider.jar:"
 	j2se150="$JAVA50_HOME/jre/lib/rt.jar:$JAVA50_HOME/jre/lib/jsse.jar:$JAVA50_HOME/jre/lib/jce.jar:$JAVA50_HOME/jre/lib/charsets.jar"
 	javase160="$JAVA60_HOME/jre/lib/resources.jar:$JAVA60_HOME/jre/lib/rt.jar:$JAVA60_HOME/jre/lib/jsse.jar:$JAVA60_HOME/jre/lib/jce.jar:$JAVA60_HOME/jre/lib/charsets.jar"
+	javase170="$JAVA60_HOME/jre/lib/resources.jar:$JAVA60_HOME/jre/lib/rt.jar:$JAVA60_HOME/jre/lib/jsse.jar:$JAVA60_HOME/jre/lib/jce.jar:$JAVA60_HOME/jre/lib/charsets.jar"
 }
 
 
@@ -199,7 +200,8 @@ build() {
 				-DdojoBuild=${MAQETTA_DOJO_BUILD}
 				$tagMaps $compareMaps $fetchTag $publish 				
 				-DJ2SE-1.5=$j2se150 \
-				-DJavaSE-1.6=$javase160"
+				-DJavaSE-1.6=$javase160 \
+				-DJavaSE-1.7=$javase170"
 	$cmd
 }
 
