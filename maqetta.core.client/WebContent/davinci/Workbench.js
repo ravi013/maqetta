@@ -345,7 +345,8 @@ var Workbench = {
 		// bind overlay widgets to corresponding davinci states. singleton; no need to unsubscribe
 		connect.subscribe("/davinci/states/state/changed", function(args) {
 			//FIXME: This is page editor-specific logic within Workbench.
-			var context = (Runtime.currentEditor && Runtime.currentEditor.declaredClass == "davinci.ve.PageEditor" && 
+			var context = (Runtime.currentEditor && (Runtime.currentEditor.declaredClass == "davinci.ve.PageEditor"
+				|| Runtime.currentEditor.declaredClass == "davinci.ve.WidgetEditor") && 
 					Runtime.currentEditor.visualEditor && Runtime.currentEditor.visualEditor.context);
 			if(!context){
 				return;
@@ -1229,7 +1230,7 @@ var Workbench = {
 				mainBody.tabs.perspective.right.startup();
 				// expandToSize is what expandPaletteContainer() uses as the
 				// width of the palette when it is in expanded state.
-				paletteCache.right_mainBody = {
+				paletteCache["right_mainBody"] = {
 					expandToSize:340,
 					initialExpandToSize:340
 				};
@@ -1276,15 +1277,18 @@ var Workbench = {
 					style = 'height:80px;';
 					clazz += "davinciBottomPalette";
 				}
+				
+				
 				cp1 = mainBody.tabs.perspective[position] = new TabContainer({
 					region: region,
 					id:'palette-tabcontainer-'+position,
 					tabPosition:positionSplit[0]+'-h',
-					tabStrip:false,
+					tabStrip:true,
+					 useSlider:true,
 					'class': clazz,
 					style: style,
 					splitter: region != "center",
-					controllerWidget: "dijit.layout.TabController"
+					controllerWidget: "dijit.layout.TabController" 
 				});
 				parent.addChild(cp1);
 				dojo.connect(cp1, 'selectChild', this, function(tab){
@@ -1316,6 +1320,8 @@ var Workbench = {
 				this._showViewAddChildInProcess = true;
 				if (!hidden) {
 					cp1.addChild(tab);
+					mainBodyContainer.layout();
+					mainBodyContainer.resize();
 				}
 				this._showViewAddChildInProcess = false;
 				// Put a tooltip on the tab button. Note that native TabContainer
@@ -1560,7 +1566,8 @@ var Workbench = {
 		if(!keywordArgs.initializationTime){
 			Workbench._state.activeEditor = fileName;
 		}
-		editorContainer.setEditor(editorExtension, fileName, true, keywordArgs.fileName, editorContainer.domNode, newHtmlParams).then(function(editor) {
+		
+		editorContainer.setEditor(editorExtension, fileName, true, keywordArgs, editorContainer.domNode, newHtmlParams).then(function(editor) {
 			if (keywordArgs.startLine) {
 				editorContainer.editor.select(keywordArgs);
 			}

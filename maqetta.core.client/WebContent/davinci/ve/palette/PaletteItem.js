@@ -16,7 +16,8 @@ define([
 	"davinci/ui/dnd/DragManager",
 	"davinci/ve/utils/GeomUtils",
 	"davinci/ve/metadata",
-	"dojo/i18n!davinci/ve/nls/common"
+	"dojo/i18n!davinci/ve/nls/common",
+	"davinci/Workbench"
 ], function(
 	declare,
 	On,
@@ -35,7 +36,8 @@ define([
 	DragManager,
 	GeomUtils,
 	Metadata,
-	commonNls
+	commonNls,
+	Workbench
 ){
 
 return declare("davinci.ve.palette.PaletteItem", _WidgetBase,{
@@ -442,6 +444,9 @@ return declare("davinci.ve.palette.PaletteItem", _WidgetBase,{
 						className: "paletteItemMorePopup",
 						style: "width: auto; ",
 						content: paletteItemMoreContent,
+						onMouseLeave: function(){
+							Popup.close(this._tooltipDialog);
+				        },
 						onShow: function(e){
 							// Drop down 12px to make it closer to button that launched the TooltipDialog
 							var parentNode = this._tooltipDialog.domNode.parentNode;
@@ -495,6 +500,26 @@ return declare("davinci.ve.palette.PaletteItem", _WidgetBase,{
 							{className:"paletteTooltipCurrentLibrary", innerHTML:' ('+this._collectionName+')' }, 
 							paletteTooltipCurrent);
 				}
+				var paletteTooltipEditWidget = domConstruct.create("button", 
+						{className:"paletteTooltipEditWidget",innerHTML:' Edit '},
+						paletteTooltipCurrent);
+				On(paletteTooltipEditWidget, 'click', function(e){
+					Event.stop(e);
+					var descriptivePath = Metadata.getDescriptorPath(this.type);
+					var typeWithSlashes = this.type.replace(/\./g, "/");
+					var typeTokens = typeWithSlashes.split('/');
+					typeTokens.shift();
+					var typeAdjusted = typeTokens.join('/'); 
+					
+					console.debug("descriptivePath "+descriptivePath);
+					console.debug("this.type "+this.type);
+					Workbench.openEditor({
+						fileName: descriptivePath+"/"+typeAdjusted+".widget",
+						content: "Yet to be loaded",
+						type:this.type
+					});
+					}.bind(this));
+				
 				var classes = {
 					 container:'helpInnerContentSummary',
 					 title:'helpInnerContentSummaryTitle',
@@ -521,6 +546,9 @@ return declare("davinci.ve.palette.PaletteItem", _WidgetBase,{
 					className: "paletteItemHelpPopup",
 					style: "width: auto; ",
 					content: paletteItemHelpContent,
+					onMouseLeave: function(){
+						Popup.close(this._tooltipDialog);
+			        },
 					onShow: function(e){
 						// Move up 12px to make it closer to button that launched the TooltipDialog
 						var parentNode = this._tooltipDialog.domNode.parentNode;

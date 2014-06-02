@@ -43,10 +43,10 @@ return {
             views: [
                 {
                     viewID: "davinci.ve.Palette",
-                    position: "left",
+                    position: "right",
                     selected: true
                 },
-                {
+              /*  {
                     viewID: "davinci.ui.outline",
                     position: "left"
                 },
@@ -58,21 +58,21 @@ return {
                     viewID: "davinci.ui.comment",
                     position: "right",
                     hidden: true
-                },
+                },*/
                 {
                     viewID: "davinci.ve.states",
-                    position: "right-bottom",
+                    position: "right",
                     selected: true
                 },
                 {
                     viewID: "davinci.ui.navigator",
-                    position: "left-bottom",
+                    position: "left",
                     selected: true
                 },
-                {
+                /*{
                     viewID: "davinci.review.reviewNavigator",
                     position: "left-bottom"
-                }
+                }*/
             ]
         }
     ],

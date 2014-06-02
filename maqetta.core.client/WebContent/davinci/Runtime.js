@@ -5,6 +5,7 @@ define([
 	"./html/html.plugin",
 	"./js/js.plugin",
 	"./ve/ve.plugin",
+	"./ve/widget.plugin",
 	"./ve/themeEditor/themeEditor.plugin",
 	"./review/review.plugin",
 	"./UserActivityMonitor"
@@ -15,6 +16,7 @@ define([
 	html_plugin,
 	js_plugin,
 	ve_plugin,
+	widget_plugin,
 	themeEditor_plugin,
 	review_plugin,
 	UserActivityMonitor
@@ -26,6 +28,7 @@ var plugins = [
 	html_plugin,
 	js_plugin,
 	ve_plugin,
+	widget_plugin,
 	themeEditor_plugin,
 	review_plugin
 ];

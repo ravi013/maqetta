@@ -44,14 +44,15 @@ return declare(ToolbaredContainer, {
 			this.editor.editor.getTextView().resize();
 		}
 	},
-
-	setEditor: function(editorExtension, fileName, content, file, rootElement, newHtmlParams){
+	setEditor: function(editorExtension, fileName, content, keyArgs, rootElement, newHtmlParams){
 		var d = new Deferred();
+		var file=keyArgs.fileName;
 		this.editorExtension = editorExtension;
 		require([editorExtension.editorClass], function(EditorCtor) {
 			try {
 				var editor = this.editor = new EditorCtor(this.containerNode, fileName);
 				var setupEditor = function(){
+					var deffered=new Deferred();
 					if(editor.setRootElement){
 						editor.setRootElement(rootElement);
 					}
@@ -79,37 +80,59 @@ return declare(ToolbaredContainer, {
 					var editorsContainer = "editors_container";
 					if(davinci.Workbench._state.activeEditor == fileName){
 						// Tab is visible.  Go ahead
-						editor.setContent(fileName, content, newHtmlParams);
-
-						// keyboard bindings
-						this._setupKeyboardHandler(editor);
+						var deffered2=editor.setContent(fileName, content, newHtmlParams,keyArgs);
+						console.debug("deffered2="+deffered2);
+						if(deffered2){
+							deffered2.then(function(){updateEditor(deffered);});
+						}else{updateEditor(deffered);}
+						
 					}else{
 						// When tab is selected, set up the editor
 						var handle = dojo.subscribe(editorsContainer + "-selectChild", this, function(args){
 							if(editor==args.editor){
 								dojo.unsubscribe(handle);
-								editor.setContent(fileName, content);
-
-								// keyboard bindings
-								this._setupKeyboardHandler(editor);
+								var deffered2=editor.setContent(fileName, content, newHtmlParams,keyArgs);
+								console.debug("deffered2="+deffered2);
+								if(deffered2){
+									deffered2.then(function(){updateEditor(deffered);});
+								}else{updateEditor(deffered);}
+							}else{
+								deffered.resolve();
 							}
 						});
 					}
+					return deffered.promise;
+				}.bind(this);
+
+				var updateEditor = function(deffered){					
+					// keyboard bindings
+					this._setupKeyboardHandler(editor);
 					editor.editorContainer=this;
 					this.setDirty(editor.isDirty);
+					var editorsContainer = dijit.byId("editors_container");
+					editorsContainer.resize();
+					console.debug("Editor containor resolve updateEditor");
+					deffered.resolve();
 				}.bind(this);
 
 				(editor.deferreds || new Deferred().resolve()).then(function(){
 					// content === true indicates that the content should be asynchronously fetched as needed
 					if (content === true) {
+						if(typeof(file.getContent) === "function"){
 						return file.getContent().then(function(fileContent) {
 							content = fileContent;
-						});
+						});}else{
+							return content="";
+						}
 					}
 					return new Deferred().resolve();
 				}).then(function(){
-					setupEditor();
-					d.resolve(editor);
+					setupEditor().then(function(){
+						 console.debug("EditorContainor done setup");
+						d.resolve(editor);
+					}, function(e){
+						d.reject(e);
+					});					
 				}, function(e){
 					d.reject(e);
 				});

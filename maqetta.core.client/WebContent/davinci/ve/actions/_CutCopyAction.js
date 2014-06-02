@@ -85,7 +85,7 @@ return declare("davinci.ve.actions.CutAction", [ContextAction], {
 	shouldShow: function(context){
 		context = this.fixupContext(context);
 		var editor = context ? context.editor : null;
-		return (editor && editor.declaredClass == 'davinci.ve.PageEditor');
+		return (editor && (editor.declaredClass == 'davinci.ve.PageEditor'|| editor.declaredClass == 'davinci.ve.WidgetEditor'));
 	},
 	
 	_invokeSourceEditorAction: function(context) {

@@ -743,7 +743,7 @@ return declare("davinci.ve.palette.Palette", [WidgetBase, _KeyNavContainer], {
 		}
 		//FIXME: temporary
 		opt.icon = opt.iconLarge;
-		var node = new PaletteItem(opt);
+		var node = new PaletteItem(opt,Workbench);
 		if(!folder){
 			this.addChild(node);
 		}else{
@@ -963,8 +963,8 @@ return declare("davinci.ve.palette.Palette", [WidgetBase, _KeyNavContainer], {
 			var paletteItem = this.sunkenItems[i];
 			if(paletteItem._tooltipDialog){
 				//FIXME: Need to generalize for help feature, too
-				paletteItem.paletteItemMoreCloseCleanup();
-				paletteItem.paletteItemHelpCloseCleanup();
+				//FIXME paletteItem.paletteItemMoreCloseCleanup();
+				//FIXME paletteItem.paletteItemHelpCloseCleanup();
 			}
 			paletteItem.flat(paletteItem.domNode);
 			paletteItem._selectionShowing = false;

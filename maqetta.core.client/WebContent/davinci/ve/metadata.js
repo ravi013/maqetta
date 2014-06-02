@@ -1107,6 +1107,19 @@ define([
          */
         getDeferreds: function(){
         	return deferredGets;
+        },
+        getDescriptorPath: function(type) {
+            if (!type) {
+                return undefined;
+            }        
+            
+            // get path from library descriptor
+            var lib = getLibraryForType(type),
+                wm,
+                descriptorPath;
+            if (lib) {
+                return lib.$wm.$moduleFolderPath;
+            }
         }
     };
 

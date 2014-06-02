@@ -8,6 +8,7 @@
 	<meta http-equiv="Pragma" CONTENT="no-cache">
 	<style type="text/css">
 		@import url("app/davinci/workbench.css?@revision@");
+		@import url("app/davinci/dbootstrap.css?@revision@");
 		html, body {
 			width: 100%;
 			height: 100%;
@@ -18,7 +19,7 @@
 		parseOnLoad: true,
 		modulePaths:{'preview':'../preview', 'system':'../system'},
 		aliases:[['i18n', 'dojo/i18n']],
-		cacheBust: '@revision@',
+		cacheBust: function () {return new Date();},
 		ioPublish:true
 	"></script>
 	<script type="text/javascript">

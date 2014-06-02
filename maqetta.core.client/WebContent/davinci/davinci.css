@@ -26,9 +26,7 @@ BODY{
 	text-align: center;
 }
 
-#davinci_app .dijitTabContainer, #davinci_app .dijitSplitter {
-	background-color: #ced3d3;
-}
+
 #davinci_app .davinciPaletteContainer .dijitTab {
 	border:1px solid #d2d2d2;
 }
@@ -313,7 +311,7 @@ BODY{
 	background-color: white !important;	
 }
 
-/* Tweaks to Claro for editor toolbar */
+/* Tweaks to claro for editor toolbar */
 #davinci_toolbar_pane {
 	overflow:hidden;
 	height:43px;
@@ -372,7 +370,7 @@ BODY{
 #davinci_app .davinciToolbar  .davinciFloatRight {
 	float:right;
 }
-#davinci_app #davinci_toolbar_container .dijitToolbar .dijitButton.maqLabelButton .dijitButtonNode,
+/*#davinci_app #davinci_toolbar_container .dijitToolbar .dijitButton.maqLabelButton .dijitButtonNode,
 #davinci_app #davinci_toolbar_container .dijitToolbar .dijitDropDownButton.maqLabelButton .dijitButtonNode,
 #davinci_app #davinci_toolbar_container .dijitToolbar .dijitComboButton.maqLabelButton .dijitButtonNode,
 #davinci_app #davinci_toolbar_container .dijitToolbar .dijitToggleButton.maqLabelButton .dijitButtonNode,
@@ -383,7 +381,7 @@ BODY{
 	background-image: -ms-linear-gradient(#f4f4f4, #dbdbdb);
 	background-image: -o-linear-gradient(#f4f4f4, #dbdbdb);
 	background-image: linear-gradient(#f4f4f4, #dbdbdb);
-}
+}*/
 #davinci_app #davinci_toolbar_container .dijitToolbar .dijitButton.maqLabelButton.dijitHover .dijitButtonNode,
 #davinci_app #davinci_toolbar_container .dijitToolbar .dijitDropDownButton.maqLabelButton.dijitHover .dijitButtonNode,
 #davinci_app #davinci_toolbar_container .dijitToolbar .dijitComboButton.maqLabelButton.dijitHover .dijitButtonNode,
@@ -582,7 +580,6 @@ davinci_top_bar .dijitButtonNode {
 #davinci_app #davinci_file_tabs.dijitTabContainer,
 	#davinci_app #davinci_file_tabs .dijitTabPaneWrapper {
 	background:white;
-	z-index: 3;
 	border-bottom:none;
 }
 #davinci_file_tabs .dijitTabPaneWrapper,
@@ -590,31 +587,36 @@ davinci_top_bar .dijitButtonNode {
 	#davinci_file_tabs .dijitTabContainerBottom-tabs,
 	#davinci_file_tabs .dijitTabContainerLeft-tabs,
 	#davinci_file_tabs .dijitTabContainerRight-tabs {
-	background-color: #333333;
-    background-image: linear-gradient(to bottom, #0274BE, #0274BE);
-    background-repeat: repeat-x;
-    color: #333333;
+	font-family:'Lato',​sans-serif;
+}
+#davinci_file_tabs .dijitTabCloseButton .dijitTabCloseText {
+    display: none;
+}
+.claro  .dijitTabCloseButton {
+    background-image: url("img/sprite.png");
+    background-position: -35px -321px;
+    height: 14px;
+    margin-left: 5px;
+    margin-right: -5px;
+    width: 14px;
+   
 }
 #davinci_file_tabs .dijitTab {
-	ppadding:12px 10px 13px;
-	top:0px;
-	background:#f8f8f8;
-	color:#424242;
+	padding: 3px 6px;
+	top:2px;
 	margin-right:-1px;
-	background-image: -webkit-linear-gradient(#F8F8F8 0%, #F8F8F8 90%, #EDEDED 91%, #E0E0E0 100%);
-	background-image: -maz-linear-gradient(#F8F8F8 0%, #F8F8F8 90%, #EDEDED 91%, #E0E0E0 100%);
-	background-image: -ms-linear-gradient(#F8F8F8 0%, #F8F8F8 90%, #EDEDED 91%, #E0E0E0 100%);
-	background-image: -o-linear-gradient(#F8F8F8 0%, #F8F8F8 90%, #EDEDED 91%, #E0E0E0 100%);
-	background-image: linear-gradient(#F8F8F8 0%, #F8F8F8 90%, #EDEDED 91%, #E0E0E0 100%);
+	
+	
 }
 #davinci_file_tabs .dijitTab.dijitTabChecked {
 	font-weight:bold;
 	background:white;
-	color:#222222;
 	border-bottom:1px solid white;
 	z-index:4;
 	margin-bottom:-2px;
 	background:image:none;
+	 padding-bottom: 2px;
+    padding-top: 2px;
 }
 #davinci_file_tabs .dijitTab:hover, #davinci_file_tabs .dijitTab.dijitTabChecked:hover {
 	background:#dfdfdf;
@@ -629,11 +631,15 @@ davinci_top_bar .dijitButtonNode {
 	margin-right:0px;
 }
 
+.claro .dijitTabContainerTop-tabs .dijitTabChecked {
+	 padding: 3px 6px;
+
+	}
 #davinci_app .davinciPalette {
 	background:white;
 }
 #davinci_app .davinciPalette .dijitTabContainerTop-tabs, #davinci_app .davinciPalette .dijitTabContainerBottom-tabs, #davinci_app .davinciPalette .dijitTabContainerLeft-tabs, #davinci_app .davinciPalette .dijitTabContainerRight-tabs {
-	background: #F4F4F4;
+	-background: #F4F4F4;
 }
 #davinci_app .davinciPalette > .dijitTabPaneWrapper {
 	background: white;
@@ -645,14 +651,25 @@ davinci_top_bar .dijitButtonNode {
 	width:64px;
 	margin-bottom:-1px;
 }
-#left_mainBody .davinciPalette > div > .dijitTab, 
-#left_mainBody .davinciPalette .dijitTabContainerLeft-tabs {
-	background-image: -webkit-linear-gradient(0deg, #F8F8F8 0%, #F8F8F8 92%, #F1F1F1 93%, #D7D7D7 100%);
-	background-image: -moz-linear-gradient(0deg, #F8F8F8 0%, #F8F8F8 92%, #F1F1F1 93%, #D7D7D7 100%);
-	background-image: -ms-linear-gradient(0deg, #F8F8F8 0%, #F8F8F8 92%, #F1F1F1 93%, #D7D7D7 100%);
-	background-image: -o-linear-gradient(0deg, #F8F8F8 0%, #F8F8F8 92%, #F1F1F1 93%, #D7D7D7 100%);
-	background-image: linear-gradient(0deg, #F8F8F8 0%, #F8F8F8 92%, #F1F1F1 93%, #D7D7D7 100%);
+
+#left_mainBody.maqPaletteExpanded .davinciPalette > div > .dijitTab.dijitTabChecked {
+
+/* Safari */
+-webkit-transform: rotate(-90deg);
+/* Firefox */
+-moz-transform: rotate(-90deg);
+/* IE */
+-ms-transform: rotate(-90deg);
+/* Opera */
+-o-transform: rotate(-90deg);
+/* Internet Explorer */
+filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
 }
+#davinci_app .davinciPalette .paletteIcon {
+	display: none;
+}
+/*
 #right_mainBody .davinciPalette > div > .dijitTab, 
 #right_mainBody .davinciPalette .dijitTabContainerRight-tabs {
 	background-image: -webkit-linear-gradient(180deg, #F8F8F8 0%, #F8F8F8 92%, #F1F1F1 93%, #D7D7D7 100%);
@@ -660,7 +677,7 @@ davinci_top_bar .dijitButtonNode {
 	background-image: -ms-linear-gradient(180deg, #F8F8F8 0%, #F8F8F8 92%, #F1F1F1 93%, #D7D7D7 100%);
 	background-image: -o-linear-gradient(180deg, #F8F8F8 0%, #F8F8F8 92%, #F1F1F1 93%, #D7D7D7 100%);
 	background-image: linear-gradient(180deg, #F8F8F8 0%, #F8F8F8 92%, #F1F1F1 93%, #D7D7D7 100%);
-}
+}*/
 #davinci_app .davinciPalette > div > .dijitTab:focus {
 	outline:none;
 }
@@ -697,11 +714,11 @@ davinci_top_bar .dijitButtonNode {
 }
 #davinci_app .davinciPalette .paletteIcon {
 	display: inline-block;
-	width: 26px;
-	height: 26px;
+	width: 2px;
+	height: 2px;
 	background-repeat: no-repeat;
 	background-image: url(img/sprite.png);
-	margin-top: 4px;
+	margin-top: 0px;
 }
 #davinci_app .davinciPalette .paletteIconWidgets {
 	background-position: -30px -60px;
@@ -820,12 +837,12 @@ davinci_top_bar .dijitButtonNode {
 .claro #davinci_app #davinci_user_container .dijitDropDownButton .dijitButtonText,
 .claro #davinci_app #davinci_user_container .dijitComboButton .dijitButtonText
 {
-	padding:0px .2em;	/* Squeeze padding a bit over what Claro provides */
+	padding:0px .2em;	/* Squeeze padding a bit over what claro provides */
 	margin-top: -2px;	/* To make baselines align with text on either side of buttons */
 }
 
 .claro #davinci_app #davinci_user_container .dijitArrowButtonInner {
-	/* background-image:url("img/buttonArrows.png");*/	/* Derived from Claro, but no bluish tint  FIXME: why?  resolve with other claro buttonArrows reference in .paletteDropdown */
+	/* background-image:url("img/buttonArrows.png");*/	/* Derived from claro, but no bluish tint  FIXME: why?  resolve with other claro buttonArrows reference in .paletteDropdown */
 	/* Following 2 lines squeeze the arrow closer to text */
 	/* background-position:-53px 53%; */
 	background-image:url("img/sprite.png");
@@ -843,7 +860,7 @@ davinci_top_bar .dijitButtonNode {
 .claro #davinci_app #davinci_user_container .dijitComboButton .dijitDownArrowButtonHover, 
 .claro #davinci_app #davinci_user_container .dijitDropDownButtonHover .dijitButtonNode
 {
-	color: white; /* Override Claro, which uses black */
+	color: white; /* Override claro, which uses black */
 }
 #loginpane {
 	margin-top: 2em;
@@ -1299,27 +1316,27 @@ davinci_top_bar .dijitButtonNode {
 .dojoyPaletteItemSunken .paletteItemLabel {
 	font-weight:bold;
 }
-.dojoyPaletteFolder {
+.dojoyPaletteFolderr {
     border-color: #D1D1D1 #989898 #989898 white;
     line-height: 18px;
 	height: 18px;
 	font-size:13px;
 }
-.claro .dojoyPaletteFolderLow,
+.claro .dojoyPaletteFolderLowr,
 /*    background-image: url(images/palette-folder-bg.gif); */
-.claro .dojoyPaletteFolderHi {
+.claro .dojoyPaletteFolderHir {
 /*    background-image: url(images/palette-folder-bg-hi.gif); */
     background: #EAEAEA url(../dijit/themes/claro/images/standardGradient.png) repeat-x scroll left top;
 }
-.dojoyPaletteFolder img {
+.dojoyPaletteFolderr img {
 	margin-right:4px;
 }
-.PaletteFolderSubsection {
+.PaletteFolderSubsectionr {
 	padding-left:16px;
 	font-size:12px;
 	font-style:italic;
 }
-.dojoyPaletteSearch {
+.dojoyPaletteSearchr {
 /*	font-size: 12px;*/
     background-repeat: no-repeat;
     padding-left: 1px;
@@ -1398,6 +1415,13 @@ background-position: -75px -745px;
 	background-image: url(img/sprite.png);
 	background-position: -19px -512px;
 }
+
+.refreshIcon {
+	background-image: url(img/Refresh.png);
+	width:32px;
+	height:32px;
+}
+
 .dijitButtonDisabled .editCutIcon {
 	background-position: -19px -483px;
 }
@@ -1692,7 +1716,7 @@ background-position: -75px -745px;
 	background-position: -82px -66px;
 }
 
-/* FIXME: I'm hardcoding the dropdown arrow icon from Claro.
+/* FIXME: I'm hardcoding the dropdown arrow icon from claro.
 	Instead, we should just use a Dijit DropDownArrow control
 	and then inherit the styling "for free" but current code
 	for dropdown menus uses dijit.Menubar as top-level widget
@@ -2736,4 +2760,23 @@ td.welcome_section_cell {
 }
 .EventSelection .propertyExtra {
 	width:5px;
+}
+
+.rotate {
+
+/* Safari */
+-webkit-transform: rotate(-90deg);
+
+/* Firefox */
+-moz-transform: rotate(-90deg);
+
+/* IE */
+-ms-transform: rotate(-90deg);
+
+/* Opera */
+-o-transform: rotate(-90deg);
+
+/* Internet Explorer */
+filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
 }
