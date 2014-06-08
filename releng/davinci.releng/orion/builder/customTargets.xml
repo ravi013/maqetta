@@ -17,7 +17,7 @@
 			
 		<antcall target="compareMapFiles"/>
 		<antcall target="tagMapFiles" />
-		-->
+
 		<copy todir="${buildDirectory}/maps">
 			<fileset dir="${builder}/../maps" />
 		</copy>
