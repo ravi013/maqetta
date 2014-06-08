@@ -31,10 +31,13 @@ BODY{
 	border:1px solid #d2d2d2;
 }
 #davinci_app .davinciPaletteContainer .dijitTabContainerLeft-tabs {
-	border-right: 1px solid #d2d2d2;
+	background-color: #F5F5F5;
+    border-right: 1px solid #D5D5D5;
+
 }
 #davinci_app .davinciPaletteContainer .dijitTabContainerRight-tabs {
-	border-left: 1px solid #d2d2d2;
+	background-color: #F5F5F5;
+	border-left: 1px solid #D5D5D5;
 }
 .claro #davinci_app .davinciPaletteContainer .dijitTab.dijitTabChecked .dijitTabInnerDiv {
 	background-color:#B2D4F3;
@@ -316,8 +319,10 @@ BODY{
 	overflow:hidden;
 	height:43px;
 	padding:0px;
-	border-top: none;
-	border-bottom: 4px solid #f4f4f4;
+  	background-color: #F5F5F5;
+    border: 1px solid #D5D5D5;
+    border-radius: 3px 3px 0 0;
+    line-height: 1;
 	margin-top: -3px;
 }
 .claro .dijitToolbar.davinciToolbar {
@@ -327,14 +332,7 @@ BODY{
 }
 #davinci_app #davinci_toolbar_pane .dijitToolbar {
 	padding:8px 0px 4px 6px; 
-	background-color:white;
-	height:44px;
-	border-top: 1px solid gray;
-	background-image:-webkit-linear-gradient(white 75%, #999 100%);
-	background-image:-moz-linear-gradient(white 75%, #999 100%);
-	background-image:-ms-linear-gradient(white 75%, #999 100%);
-	background-image:-o-linear-gradient(white 75%, #999 100%);
-	background-image:linear-gradient(white 75%, #999 100%);
+	height:auto;
 }
 .claro .dijitToolbar.davinciToolbar .dijitButtonContents {
 	padding:0 2px;
@@ -370,6 +368,44 @@ BODY{
 #davinci_app .davinciToolbar  .davinciFloatRight {
 	float:right;
 }
+
+.claro #davinci_menubar_pane .dijitContentPane{
+padding:0;
+}
+html.dj_gecko body#maqBody.claro div#davinci_app.dijitBorderContainerNoGutter div#davinci_menubar_pane.dijitContentPane
+{
+	
+	padding:0;
+	  border-bottom: 1px solid #E5E5E5;
+}
+html.dj_gecko body#maqBody.claro div#davinci_app.dijitBorderContainerNoGutter div#davinci_menubar_pane.dijitContentPane div#davinci_menu_bar.dijitMenuBar
+{
+ margin-bottom: 0;
+ line-height: 15px;
+    background-color: #333333;
+     background: linear-gradient(top,  #0274BE,  #025D99);
+  background: -ms-linear-gradient(top,  #0274BE,  #025D99);
+  background: -webkit-gradient(linear, left top, left bottom, from(#0274BE), to(#025D99));
+  background: -moz-linear-gradient(top,  #0274BE,  #025D99);
+  border: solid 1px #026AAD;
+    color: #FFFFFF;
+    border: none;
+     border-radius: 0px;
+}
+html.dj_gecko body#maqBody.claro div#davinci_app.dijitBorderContainerNoGutter div#davinci_menubar_pane.dijitContentPane div#davinci_menu_bar.dijitMenuBar div
+{
+	color: #FFFFFF;
+}
+
+html.dj_gecko body#maqBody.claro div#davinci_app.dijitBorderContainerNoGutter div#left_mainBody.dijitBorderContainerNoGutter div#palette-tabcontainer-left-top.dijitTabContainer div.dijitTabPaneWrapper div#davinci.ui.navigator.dijitLayoutContainer div.dijitAlignClient div#resourceTree.dijitTree div#dijit__TreeNode_0.dijitTreeIsRoot div.dijitTreeContainer div#dijit__TreeNode_20.dijitTreeIsRoot div.dijitTreeRow span.dijitTreeContent img.dijitIcon
+{
+	
+}
+html.dj_gecko body#maqBody.claro div#davinci_app.dijitBorderContainerNoGutter div#davinci_menubar_pane.dijitContentPane div#davinci_menu_bar.dijitMenuBar
+{padding-left: 0px;
+}
+
+
 /*#davinci_app #davinci_toolbar_container .dijitToolbar .dijitButton.maqLabelButton .dijitButtonNode,
 #davinci_app #davinci_toolbar_container .dijitToolbar .dijitDropDownButton.maqLabelButton .dijitButtonNode,
 #davinci_app #davinci_toolbar_container .dijitToolbar .dijitComboButton.maqLabelButton .dijitButtonNode,
@@ -425,6 +461,7 @@ BODY{
 #davinci_app .davinciToolbar .maqLabelButton.maqDesignButton .dijitButtonNode {
 	border-top-right-radius:0px;
 	border-bottom-right-radius:0px;
+	 padding-bottom: 7px;
 }
 #davinci_app .davinciToolbar .maqLabelButton.maqSourceComboButton {
 	margin-left:-1px;
@@ -648,24 +685,41 @@ davinci_top_bar .dijitButtonNode {
 	padding: 2px;
 	text-align: center;
 	font-size: 11.5px;
-	width:64px;
-	margin-bottom:-1px;
+	wwidth:64px;
+	mmargin-bottom:-1px;
 }
 
-#left_mainBody.maqPaletteExpanded .davinciPalette > div > .dijitTab.dijitTabChecked {
+
+#left_mainBody .davinciPalette > div > .dijitTab {
 
 /* Safari */
--webkit-transform: rotate(-90deg);
+//-webkit-transform: rotate(-90deg);
 /* Firefox */
--moz-transform: rotate(-90deg);
+//-moz-transform: rotate(-90deg);
 /* IE */
--ms-transform: rotate(-90deg);
+//-ms-transform: rotate(-90deg);
 /* Opera */
--o-transform: rotate(-90deg);
+//-o-transform: rotate(-90deg);
 /* Internet Explorer */
-filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-
+//filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+ top: 40px;
 }
+
+#right_mainBody .davinciPalette > div > .dijitTab {
+
+/* Safari */
+//-webkit-transform: rotate(90deg);
+/* Firefox */
+//-moz-transform: rotate(90deg);
+/* IE */
+//-ms-transform: rotate(90deg);
+/* Opera */
+//-o-transform: rotate(90deg);
+/* Internet Explorer */
+//filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+ top: 40px;
+}
+
 #davinci_app .davinciPalette .paletteIcon {
 	display: none;
 }
@@ -714,17 +768,29 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 #davinci_app .davinciPalette .paletteIcon {
 	display: inline-block;
-	width: 2px;
-	height: 2px;
+	width: 26px;
+	height: 26px;
 	background-repeat: no-repeat;
 	background-image: url(img/sprite.png);
 	margin-top: 0px;
+	float: left;
+	padding: 5px;
 }
 #davinci_app .davinciPalette .paletteIconWidgets {
-	background-position: -30px -60px;
+	background-image: url("img/icons/palette.png");
+    height: 13px;
+    width: 13px;
+    margin-top: 4px;
 }
 #davinci_app .davinciPalette .paletteIconStates {
-	background-position: -30px -90px;
+	background-image: url("img/icons/film-timeline.png");
+    height: 13px;
+    width: 13px;
+}
+#davinci_app .davinciPalette .paletteIconStyles {
+	background-image: url("img/icons/edit-style.png");
+    height: 13px;
+    width: 13px;
 }
 #davinci_app .davinciPalette .paletteIconReviews {
 	background-position: -30px -120px;
@@ -733,7 +799,10 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 	background-position: -30px -150px;
 }
 #davinci_app .davinciPalette .paletteIconFiles {
-	background-position: -30px -180px;
+	background-image: url("img/icons/folders.png");
+    height: 13px;
+    width: 13px;
+    margin-top: 4px;
 }
 #davinci_app .davinciPalette .paletteIconComments {
 	background-position: -30px -210px;
@@ -761,8 +830,10 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 	line-height:25px;
 	font-size:16px;
 	text-transform:uppercase;
-	color:#444;
-	background:none;
+	   background-color: #F5F5F5;
+    border: 1px solid #D5D5D5;
+    border-radius: 3px 3px 0 0;
+    line-height: 1;
 	overflow: visible;
 	z-index: 1;
 }
@@ -1059,6 +1130,8 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 	height:81px; 
 	position:relative;
 	z-index:1;
+	padding: 35px;
+
 }
 .dojoyPaletteCommon .paletteItemSelectionContainer {
 	vertical-align: top;
@@ -1068,11 +1141,10 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 .dojoyPaletteCommon .paletteItemSelectionContent {
 	display:inline-block; 
 	z-index:1; 
-	position:absolute; 
-	top:-8px;
+	position:absolute; 	
 	left:0px;
-	width:66px;
-	height:85px;
+	width:136px;
+	height:155px;
 	padding:0px;
 	border:2px solid #999;
 	border-radius:4px;
@@ -1252,11 +1324,11 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 	vertical-align: top;
 }
 .dojoyPalette.paletteLayoutIcons .dojoyPaletteItem.dojoyPaletteCommon {
-	display:inline-block;
-	width:68px;
-	height:95px;
-	line-height:95px;
-	outline:none;
+	 border-left: 1px solid #B5BCC7;
+    border-top: 1px solid #B5BCC7;
+    display: inline-block;
+    line-height: 95px;
+    outline: medium none;
 }
 .dojoyPalette.paletteLayoutIcons .dojoyPaletteItem.dojoyPaletteCommon a {
 	vertical-align:bottom;
@@ -1491,8 +1563,9 @@ background-position: -75px -745px;
 	background-position: -92px -1663px;
 }
 .tableCommandsIcon {
-	background-image: url(img/sprite.png);
-	background-position: 0px -1406px;
+	background-image: url("img/icons/table.png");
+    height: 13px;
+    width: 13px;
 }
 .tableInsertIconSmall {
 	background-image: url(img/sprite.png);
@@ -2466,44 +2539,36 @@ td.welcome_section_cell {
 	overflow:hidden;
 	border:none;
 	background:#d3e1ee;
-	border:2px solid #6a94dc;
+	border:1px dashed #6a94dc;
 }
 .editFocusFrameLEFT {
-	width:4px;
+	width:2px;
 	border-right:none;
 	cursor:w-resize;
 }
 .editFocusFrameRIGHT {
-	width:4px;
+	width:2px;
 	border-left:none;
 	cursor:e-resize;
 }
 .editFocusFrameTOP {
-	height:4px;
+	height:2px;
 	border-bottom:none;
 	cursor:n-resize;
 }
 .editFocusFrameBOTTOM {
-	height:4px;
+	height:2px;
 	border-top:none;
 	cursor:s-resize;
 }
 .editFocusNob {
 	
-	background-color:#246ce4;
-	background-image:-webkit-linear-gradient(#2b7bfc,#246ce4,#042378);
-	background-image:-moz-linear-gradient(#2b7bfc,#246ce4,#042378);
-	background-image:-ms-linear-gradient(#2b7bfc,#246ce4,#042378);
-	background-image:-linear-gradient(#2b7bfc,#246ce4,#042378);
-	-webkit-border-radius:10px;
-	-moz-border-radius:10px;
-	-ms-border-radius:10px;
-	border-radius:10px;
+	background-color:#6a94dc;
 	border:1px solid white; 
 	box-shadow:0px 2px 2px #888;
 	position:absolute;
-	width:10px;
-	height:10px;
+	width:5px;
+	height:5px;
 	overflow:hidden;
 }
 #maqBody .maqHidden {
@@ -2516,6 +2581,7 @@ td.welcome_section_cell {
 
 #visualEditorBorder {
 	pointer-events:none;
+	display: none;
 }
 #visualEditorBorderTopLeft {
 	position:absolute;
@@ -2530,6 +2596,7 @@ td.welcome_section_cell {
 	background:-ms-linear-gradient(-45deg,#e0e0e0,#fcfcfc) no-repeat;
 	background:-o-linear-gradient(-45deg,#e0e0e0,#fcfcfc) no-repeat;
 	background:linear-gradient(-45deg,#e0e0e0,#fcfcfc) no-repeat;
+	
 }
 #visualEditorBorderTopRight {
 	position:absolute;
@@ -2779,4 +2846,21 @@ td.welcome_section_cell {
 /* Internet Explorer */
 filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 
+}
+
+
+#davinci_app #davinci_toolbar_container .dijitToolbar {
+ background-image: none;
+ }
+ #davinci_app #davinci_bottomtoolbar_container .dijitToolbar.davinciToolbar  {
+ background-image: none;
+  margin-bottom: 0px;
+   overflow: visible;
+   background-color: #F5F5F5;
+   border: 1px solid #D5D5D5;
+ }
+ 
+ #davinci_bottomtoolbar_container.dijitContentPane ,#davinci_bottomtoolbar_pane.dijitContentPane {
+    padding: 0px;
+     overflow: visible;
 }

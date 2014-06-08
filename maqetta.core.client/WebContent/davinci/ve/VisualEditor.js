@@ -92,11 +92,11 @@ var VisualEditor = declare("davinci.ve.VisualEditor",  null,  {
 		if(!visualEditorBorder){
 			var editorsStackContainer = document.getElementById('editorsStackContainer');
 			visualEditorBorder = domConstruct.create('div', {id:'visualEditorBorder'}, editorsStackContainer);
-			domConstruct.create('div', {id:'visualEditorBorderTopLeft'}, visualEditorBorder);
+		/*	domConstruct.create('div', {id:'visualEditorBorderTopLeft'}, visualEditorBorder);
 			domConstruct.create('div', {id:'visualEditorBorderTopRight'}, visualEditorBorder);
 			domConstruct.create('div', {id:'visualEditorBorderTop'}, visualEditorBorder);
 			domConstruct.create('div', {id:'visualEditorBorderRight'}, visualEditorBorder);
-			domConstruct.create('div', {id:'visualEditorBorderLeft'}, visualEditorBorder);
+			domConstruct.create('div', {id:'visualEditorBorderLeft'}, visualEditorBorder);*/
 		}
 		
 	},

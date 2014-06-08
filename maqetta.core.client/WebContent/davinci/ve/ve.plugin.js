@@ -8,13 +8,13 @@ return {
     "davinci.view": [
         {
             id: "Palette",
-            title: "Palette",
+            title: "",
             viewClass: "davinci/ve/palette/HtmlWidgets",
             iconClass: "paletteIcon paletteIconWidgets"
         },
         {
             id: "states",
-            title: "Scenes",
+            title: "",
             viewClass: "davinci/ve/views/StatesView",
             iconClass: "paletteIcon paletteIconStates"
         },
@@ -32,7 +32,8 @@ return {
         {
             id: "style",
             title: "",	// Tab titles for property tabs are generated programmatically
-            viewClass: "davinci/ve/views/SwitchingStyleView"
+            viewClass: "davinci/ve/views/SwitchingStyleView",
+            iconClass: "paletteIcon paletteIconStyles"
         }
     ],
 
@@ -49,16 +50,17 @@ return {
               /*  {
                     viewID: "davinci.ui.outline",
                     position: "left"
-                },
+                },*/
                 {
                     viewID: "davinci.ve.style",
-                    position: "right"
+                    position: "right",
+                  //  hidden: true
                 },
                 {
                     viewID: "davinci.ui.comment",
                     position: "right",
                     hidden: true
-                },*/
+                },
                 {
                     viewID: "davinci.ve.states",
                     position: "right",
@@ -294,11 +296,12 @@ return {
             actions: [
               {
                   id: "savecombo",
-                  className: "maqLabelButton",
-                  showLabel: true,
+                  iconClass: 'editActionIcon dijitEditorIconSave',
+                 // className: "maqLabelButton",
+                  //showLabel: true,
                   label: "Save",
                   toolbarPath: "save",
-                  type:'ComboButton',
+                  //type:'ComboButton',
                   run: function() {
                       require(['../Workbench'], function(workbench) {
                       		require("../ui/Resource").save();
@@ -347,7 +350,7 @@ return {
               },
   				{
                 	id: "undo",
-                    iconClass: 'editActionIcon undoIcon',
+                    iconClass: 'editActionIcon dijitEditorIconUndo',
                     action: "davinci/actions/UndoAction",
                     label: "Undo",
                     //showLabel: true,
@@ -356,7 +359,7 @@ return {
                 },
                 {
                     id: "redo",
-                    iconClass: 'editActionIcon redoIcon',
+                    iconClass: 'editActionIcon dijitEditorIconRedo',
                     action: "davinci/actions/RedoAction",
                     //showLabel: true,
                     label: "Redo",
@@ -366,7 +369,7 @@ return {
 				{
 				    id: "cut",
 				    label: "Cut",
-				    iconClass: "editActionIcon editCutIcon",
+				    iconClass: "editActionIcon dijitEditorIconCut",
 				    action: "davinci/ve/actions/CutAction",
 				    toolbarPath: "cutcopypaste",
 				    keyBinding: {accel: true, charOrCode: "x"}
@@ -375,21 +378,21 @@ return {
 				{
 				    id: "copy",
 				    label: "Copy",
-				    iconClass: "editActionIcon editCopyIcon",
+				    iconClass: "editActionIcon dijitEditorIconCopy",
 				    action: "davinci/ve/actions/CopyAction",
 				    toolbarPath: "cutcopypaste",
 				    keyBinding: {accel: true, charOrCode: "c"}
 				},
                 {
                     label: "Paste",
-                    iconClass: "editActionIcon editPasteIcon",
+                    iconClass: "editActionIcon dijitEditorIconPaste",
                     action: "davinci/ve/actions/PasteAction",
                     toolbarPath: "cutcopypaste",
                     keyBinding: {accel: true, charOrCode: "v"}
                 },
 				{
                     id: "delete",
-                    iconClass: "editActionIcon editDeleteIcon",
+                    iconClass: "editActionIcon dijitEditorIconDelete",
                     label: "Delete",
                     action: "davinci/ve/actions/DeleteAction",
                     toolbarPath: "delete",
@@ -521,7 +524,7 @@ return {
                     showLabel: true,
                     label: "Flow",	// will be updated by code
                     toolbarPath: "undoredo",
-                    type:'DropDownButton',
+                    type:'ComboButton',
                     menu:[
                         {
                             label: "Flow",
@@ -543,6 +546,7 @@ return {
                     action: "davinci/ve/actions/ViewSourceAction",
                     toolbarPath: "undoredo",
                     type:'ComboButton',
+                    toolBarType:"bottom",
                     menu:[
                        {
                             keyBinding: {accel: true, charOrCode: "2", allowGlobal: true},
@@ -572,7 +576,8 @@ return {
                     action: "davinci/ve/actions/ViewDesignAction",
                     label: "Design",
                     toolbarPath: "undoredo",
-                    keyBinding: {accel: true, charOrCode: "1", allowGlobal: true}
+                    keyBinding: {accel: true, charOrCode: "1", allowGlobal: true},
+                    toolBarType:"bottom",
                 },
                 {
                     id: "closeactiveeditor",

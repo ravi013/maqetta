@@ -17,7 +17,7 @@ define({ root:
 		"properties":"properties",
 		
 		//StatesView.js
-		"Scenes":"Scenes",
+		"Scenes":"",
 		"States":"States",
 		"ActiveScene":"This scene is currently visible",
 		"AppStateFocus":"This application state is the target for application-state-specific visibility or styling changes",

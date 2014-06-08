@@ -11,9 +11,12 @@ define([
     	"davinci/ve/widgets/Cascade",
     	"davinci/ve/widgets/CommonProperties",
     	"davinci/ve/widgets/WidgetProperties",
-    	"davinci/ve/widgets/EventSelection"
+    	"davinci/ve/widgets/EventSelection",
+    	"dijit/layout/AccordionContainer",
+    	"dojo/dom-construct",
+    	
 ], function(declare, veNls, commonNls, TabContainer, ContentPane, Runtime, WidgetLite, HTMLStringUtil,
-		   	WidgetToolBar,  Cascade, CommonProperties, WidgetProperties, EventSelection
+		   	WidgetToolBar,  Cascade, CommonProperties, WidgetProperties, EventSelection,AccordionContainer,domConstruct
 		    ){
 return declare("davinci.ve.views.SwitchingStyleView", [WidgetLite], {
 
@@ -53,7 +56,7 @@ return declare("davinci.ve.views.SwitchingStyleView", [WidgetLite], {
 	          // NOTE: the first section (widgetSpecific) is injected within buildRendering()
 	          {key: "widgetSpecific",
 	        	  className:'maqPropertySection page_editor_only',
-	        	  addCommonPropertiesAtTop:false,
+	        	  addCommonPropertiesAtTop:true,
 	        	  html: "<div dojoType='davinci.ve.widgets.WidgetProperties'></div>"},  
 	        	  
 	          // NOTE: other sections are added dynamically via first call to _beforeEditorSelected
@@ -261,7 +264,7 @@ return declare("davinci.ve.views.SwitchingStyleView", [WidgetLite], {
 				}
 			}
 		}
-		this.domNode.innerHTML = template;
+		this.domNode.innerHTML = this._titleBarDiv+"<div id='style_sections_container'></div>";
 		
 		this.inherited(arguments);
 	},
@@ -421,7 +424,7 @@ return declare("davinci.ve.views.SwitchingStyleView", [WidgetLite], {
 		this._editor = editorChange.editor;
 		this.onEditorSelected(this._editor);
 
-		var parentTabContainer = this.getParent();
+		var parentTabContainer =this.getParent(); ;
 		var selectedChild = parentTabContainer.selectedChildWidget;
 		var updatedSelectedChild = false;
 		var allSections = dojo.query('.maqPropertySection', parentTabContainer.domNode);
@@ -439,8 +442,8 @@ return declare("davinci.ve.views.SwitchingStyleView", [WidgetLite], {
 			} else {
 				//Show all sections
 				allSections.forEach(function(section){
-					var contentPane = dijit.byNode(section);
-					contentPane.controlButton.domNode.style.display = '';
+				//	var contentPane = dijit.byNode(section);
+				//	contentPane.controlButton.domNode.style.display = '';
 				});
 				if (this._editor.declaredClass == 'davinci.ve.themeEditor.ThemeEditor') {
 					//Hide sections intended only for page editor
@@ -557,8 +560,12 @@ return declare("davinci.ve.views.SwitchingStyleView", [WidgetLite], {
 */
 		if(!this._alreadySplitIntoMultipleTabs){
 			var parentTabContainer = this.getParent();
-			dojo.addClass(parentTabContainer.domNode, 'propRootDetailsContainer');
-			dojo.addClass(parentTabContainer.domNode, 'propertiesContent');
+			 this.styleTab = new AccordionContainer ({},"style_sections_container");//TabContainer(); 
+			 // domConstruct.place(this.styleTab.domNode , this.domNode);
+			  this.styleTab.startup();
+			 //this.addChild(this.styleTab);		
+			dojo.addClass(this.styleTab.domNode, 'propRootDetailsContainer');
+			dojo.addClass(this.styleTab.domNode, 'propertiesContent');
 			for(var i=0;i<this.pageTemplate.length;i++){
 				var key = this.pageTemplate[i].key;
 				var title = this.pageTemplate[i].title;
@@ -566,12 +573,12 @@ return declare("davinci.ve.views.SwitchingStyleView", [WidgetLite], {
 				if(!className){
 					className = '';
 				}
-				var topContent = this._titleBarDiv;
+				var topContent = "";//this._titleBarDiv;
 				topContent += "<div class='propertiesToolBar' dojoType='davinci.ve.widgets.WidgetToolBar'></div>";
 				topContent += "<div class='cascadeBackButtonDiv'><button onclick='davinci.ve.widgets.HTMLStringUtil.showSection(\""+key+"\",\""+title+"\")'>"+title+" "+veNls.properties+"</button></div>";
 				var paneContent = HTMLStringUtil.generateTemplate(this.pageTemplate[i] );
 				var content = topContent + paneContent;
-				if(i==0){
+				if(i==-1){
 					cp = this;
 					cp.set('title', title);
 					//cp.set('content', content);
@@ -582,7 +589,7 @@ return declare("davinci.ve.views.SwitchingStyleView", [WidgetLite], {
 					//dijit.layout.ContentPane.prototype.startup.call(cp);
 				}else{
 					var cp = new ContentPane({title:title, content:content, 'class':className });
-					parentTabContainer.addChild(cp);		
+					this.styleTab.addChild(cp);		
 				}
 				cp._maqPropGroup = this.pageTemplate[i].key;
 				
@@ -620,7 +627,7 @@ return declare("davinci.ve.views.SwitchingStyleView", [WidgetLite], {
 				};}(this.pageTemplate[v]));
 			}
 
-			dojo.connect(parentTabContainer, 'selectChild', this, function(tab){
+			dojo.connect(this.styleTab, 'selectChild', this, function(tab){
 				// If the currently selected tab is invisible, then switch to the first
 				// visible tab, which will trigger yet another call to this same callback
 				if(tab.controlButton.domNode.style.display == 'none'){
@@ -661,11 +668,11 @@ return declare("davinci.ve.views.SwitchingStyleView", [WidgetLite], {
 	},
 	
 	_selectFirstVisibleTab: function(){
-		var parentTabContainer = this.getParent();
+		var parentTabContainer = this.styleTab;//this.getParent();
 		var children = parentTabContainer.getChildren();
 		for(var i=0; i<children.length; i++){
 			var cp = children[i];
-			if(cp.controlButton.domNode.style.display != 'none'){
+			if(cp.domNode.style.display != 'none'){
 				// This flag prevents Workbench.js logic from triggering expand/collapse
 				// logic based on selectChild() event
 				parentTabContainer._maqDontExpandCollapse = true;

@@ -101,10 +101,13 @@ return declare("davinci.workbench._ToolbaredContainer", [LayoutWidget, Templated
         {
         	var tempDiv = dojo.create('div',{'class':'toolbaredContainer_toolbarDiv'});
     		var tb=dojo.create("span", {style: {display: "inline-block"}},tempDiv);
+    		var tb2=dojo.create("span", {style: {display: "inline-block"}},tempDiv);
     		
-        	var toolbar = Workbench._createToolBar('toolbarPath', tb, viewActions,this._getViewContext());
-    		dojo.style(toolbar.domNode,{"display":"inline-block", "float":"left"});
-            this.toolbarCreated(containerClass, toolbar);
+        	var toolbar = Workbench._createToolBar('toolbarPath', tb,tb2, viewActions,this._getViewContext());
+    		dojo.style(toolbar[0].domNode,{"display":"inline-block", "float":"left"});
+    		dojo.style(toolbar[1].domNode,{"display":"inline-block", "float":"left"});
+            this.toolbarCreated(containerClass, toolbar[0]);
+            this.toolbarCreated('bottom-'+containerClass, toolbar[1]);
         }
 	},
 	
@@ -120,7 +123,9 @@ return declare("davinci.workbench._ToolbaredContainer", [LayoutWidget, Templated
 	getToolbarDiv: function(){
 		return this.toolbarDiv;
 	},
-	
+	getBottomToolbarDiv: function(){
+		return this.bottomToolbarDiv;
+	},
 	/**
 	 * Getter/setting for whether toolbar has been created.
 	 * Note that this function can be overridden by a subclass (e.g., EditorContainer)

@@ -13,7 +13,7 @@ return {
     "davinci.view": [
         {
             id: "navigator",
-            title: "Files",
+            title: "",
             viewClass: "davinci/workbench/Explorer",
             iconClass: "paletteIcon paletteIconFiles"
         },

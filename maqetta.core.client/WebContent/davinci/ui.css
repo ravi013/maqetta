@@ -260,10 +260,9 @@
 	height: 16px;
 }
 .stickynoteIcon {
-	background-image: url(img/sprite.png); /* FIXME: add logic for undo-disabled.gif? */
-	background-position: -46px -610px;
-	width: 27px;
-	height: 27px;
+	background-image: url("img/icons/sticky-note-medium.png");
+    height: 13px;
+    width: 13px;
 }
 .rotateIcon {
 	background-image: url(img/sprite.png);

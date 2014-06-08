@@ -188,7 +188,7 @@ define([
 	        var desktopTheme = context.getTheme();
 	        for (var s = 0, len = dojoThemeSets.themeSets.length; s < len; s++) {
 	            themeSet = dojoThemeSets.themeSets[s];
-	            if (themeSet.desktopTheme === desktopTheme.name) {
+	            if (desktopTheme && themeSet.desktopTheme === desktopTheme.name) {
 	                if (this.themeSetEquals(mobileTheme, themeSet.mobileTheme)) {
 	                    // found themeMap
 	                    return themeSet;

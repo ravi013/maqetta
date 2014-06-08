@@ -12,6 +12,7 @@ define([
 	"dijit/MenuBar",
 	"dijit/MenuItem",
 	"dijit/MenuSeparator",
+	"dijit/DropDownMenu",
 	"dijit/PopupMenuBarItem",
 	"dijit/form/Button",
 	"dijit/form/DropDownButton",
@@ -50,6 +51,7 @@ define([
 		MenuBar,
 		MenuItem,
 		MenuSeparator,
+		DropDownMenu,
 		PopupMenuBarItem,
 		Button,
 		DropDownButton,
@@ -76,7 +78,7 @@ define([
 		revResource
 ) {
 
-var paletteTabWidth = 71;	// Width of tabs for left- and right-side palettes
+var paletteTabWidth = 61;	// Width of tabs for left- and right-side palettes
 var paletteTabDelta = 20;	// #pixels - if this many or fewer pixels of tab are showing, treat as collapsed
 var paletteCache = {};
 
@@ -428,7 +430,7 @@ var Workbench = {
 	 * @param context  Document context FIXME: 95% sure that parameter is obsolete
 	 * @returns {Toolbar}  toolbar widget
 	 */
-	_createToolBar: function (toolbarProp, targetDiv, actionSets, context){
+	_createToolBar: function (toolbarProp, targetDiv,targetBottomDiv, actionSets, context){
 		var _toolbarcache = [];
 		if (!actionSets) {
 		   actionSets = Runtime.getExtensions('davinci.actionSets');
@@ -446,8 +448,9 @@ var Workbench = {
 				}
 			}
 		}
-	
-		var toolbar1 = new Toolbar({'class':"davinciToolbar"}, targetDiv);   
+		var toolBars=new Array();
+		var toolbar1 = new Toolbar({'class':"davinciToolbar"}, targetDiv);  
+		var toolbar2 = new Toolbar({'class':"davinciToolbar"}, targetBottomDiv);  
 		var radioGroups = {};
 		var firstgroup = true;
 		for (var value in _toolbarcache) {
@@ -538,7 +541,12 @@ var Workbench = {
 					dojoAction.domNode.appendChild(imageNode);
 				}
 				dojoActionDeferred.then(function(){
-					toolbar1.addChild(dojoAction);
+					if(action.toolBarType && action.toolBarType=='bottom')
+						{
+						toolbar2.addChild(dojoAction);
+						}
+					else{	toolbar1.addChild(dojoAction);}
+				
 					//FIXME: looks like the parameter to isEnabled is "context",
 					//but maybe that should be the current editor instead. Whatever, 
 					//targetObjectId just has to be wrong.
@@ -551,7 +559,9 @@ var Workbench = {
 				});
 			}
 		}
-		return toolbar1;
+		toolBars.push(toolbar1);
+		toolBars.push(toolbar2);
+		return toolBars;
 	},
 
 	showPerspective: function(perspectiveID) {
@@ -567,6 +577,7 @@ var Workbench = {
 		}
 
 		var mainBody = dojo.byId('mainBody');
+	
 		if (!mainBody.tabs) {
 			mainBody.tabs = [];
 		}
@@ -666,13 +677,14 @@ var Workbench = {
 
 		// Put the toolbar and the main window in a border container
 		var appBorderContainer = dijit.byId('davinci_app');
+
 		if (!appBorderContainer) {
 			appBorderContainer = new BorderContainer({
 				design: "headline",
 				gutters: false,
 				liveSplitters: false
 			}, "davinci_app");
-			
+			appBorderContainer.tabs = [];
 			var topBarPane = new ContentPane({
 				region: "top",
 				layoutPriority:1
@@ -723,14 +735,69 @@ var Workbench = {
 				content:'<div id="davinci_toolbar_container"></div>',
 				style:'display:none'
 			});
+			var bottomToolbarPane = new ContentPane({
+				id:'davinci_bottomtoolbar_pane',
+				region: "bottom",
+				layoutPriority:1,
+				content:'<div id="davinci_bottomtoolbar_container"></div>',
+				//style:'display:none'
+			});
+			 var  pMenuBar = new MenuBar({
+			    	id:'davinci_menu_bar',
+			    });
+
+			 var pSubMenu = new DropDownMenu({});
+			    pSubMenu.addChild(new MenuItem({
+			        label: "File item #1"
+			    }));
+			    pSubMenu.addChild(new MenuItem({
+			        label: "File item #2"
+			    }));
+			    pMenuBar.addChild(new PopupMenuBarItem({
+			        label: "File",
+			        popup: pSubMenu
+			    }));
+
+			    var pSubMenu2 = new DropDownMenu({});
+			    pSubMenu2.addChild(new MenuItem({
+			        label: "Cut",
+			        iconClass: "dijitEditorIcon dijitEditorIconCut"
+			    }));
+			    pSubMenu2.addChild(new MenuItem({
+			        label: "Copy",
+			        iconClass: "dijitEditorIcon dijitEditorIconCopy"
+			    }));
+			    pSubMenu2.addChild(new MenuItem({
+			        label: "Paste",
+			        iconClass: "dijitEditorIcon dijitEditorIconPaste"
+			    }));
+			    pMenuBar.addChild(new PopupMenuBarItem({
+			        label: "Edit",
+			        popup: pSubMenu2
+			    }));
+			    
+			var menubarPane = new ContentPane({
+				id:'davinci_menubar_pane',
+				region: "top",
+				layoutPriority:1,
+				content:'',
+				//style:'display:none'
+			});
+			menubarPane.addChild(pMenuBar);
+			
+			
 		
 			appBorderContainer.addChild(topBarPane);
 			appBorderContainer.addChild(mainStackContainer);
 			mainStackContainer.addChild(mainBorderContainer);
 			mainStackContainer.selectChild(mainBorderContainer);
-
+		
+			appBorderContainer.addChild(menubarPane);
+			appBorderContainer.addChild(toolbarPane);
 			mainBorderContainer.addChild(shadowTabContainer);
-			mainBorderContainer.addChild(toolbarPane);
+			mainBorderContainer.addChild(bottomToolbarPane);
+			
+			
 			mainBorderContainer.addChild(mainBodyContainer);
 			appBorderContainer.layout();	
 			appBorderContainer.startup();
@@ -747,8 +814,8 @@ var Workbench = {
 			}
 		}
 		/* close all of the old views */
-		for (var position in mainBody.tabs.perspective) {
-			var view = mainBody.tabs.perspective[position];
+		for (var position in appBorderContainer.tabs.perspective) {
+			var view = appBorderContainer.tabs.perspective[position];
 			if(!view) {
 				continue;
 			}
@@ -759,7 +826,7 @@ var Workbench = {
 				}
 			});
 			view.destroyRecursive(false);
-			delete mainBody.tabs.perspective[position];
+			delete appBorderContainer.tabs.perspective[position];
 		}
 
 		this._showViewPromises = dojo.map(perspective.views, function(view) {
@@ -1199,14 +1266,17 @@ var Workbench = {
 		var d = new Deferred();
 
 		try {
-			var mainBodyContainer = dijit.byId('mainBody'),
+				var appBorderContainer = dijit.byId('davinci_app');
+				var mainBodyContainer = dijit.byId('mainBody'),
+				
 				view = Runtime.getExtension("davinci.view", viewId),
 				mainBody = dojo.byId('mainBody'),
 				perspectiveId = Workbench.activePerspective,
 				perspective = Runtime.getExtension("davinci.perspective", perspectiveId),
 				position = 'left',
 				cp1;
-
+				//mainBodyContainer=mainBorderContainer;
+				//mainBody=mainBorderContainer;
 			dojo.some(perspective.views, function(view){
 				if(view.viewID ==  viewId){
 					position = view.position;
@@ -1214,20 +1284,20 @@ var Workbench = {
 				}	
 			});
 			
-			mainBody.tabs = mainBody.tabs || {};				
-			mainBody.tabs.perspective = mainBody.tabs.perspective || {};
+			appBorderContainer.tabs = appBorderContainer.tabs || {};				
+			appBorderContainer.tabs.perspective = appBorderContainer.tabs.perspective || {};
 	
 			// NOTE: Left-side and right-side palettes start up with 71px width
 			// which happens to be the exact pixel size of the palette tabs.
 			// This 71px setting prevents the user from seeing an initial flash
 			// of temporarily opened left-side and right-side palettes.
-			if (position == 'right' && !mainBody.tabs.perspective.right) {
-				mainBodyContainer.addChild(mainBody.tabs.perspective.right = 
+			if (position == 'right' && !appBorderContainer.tabs.perspective.right) {
+				appBorderContainer.addChild(appBorderContainer.tabs.perspective.right = 
 					new BorderContainer({'class':'davinciPaletteContainer', 
-						style: 'width: '+paletteTabWidth+'px;', id:"right_mainBody", 
+						style: 'width: '+paletteTabWidth+'px;', id:"right_mainBody", layoutPriority:1,
 						minSize:paletteTabWidth,	// prevent user from dragging splitter too far towards edge
-						region:'right', gutters: false, splitter:true}));
-				mainBody.tabs.perspective.right.startup();
+						region:'trailing', gutters: false, splitter:false}));
+				appBorderContainer.tabs.perspective.right.startup();
 				// expandToSize is what expandPaletteContainer() uses as the
 				// width of the palette when it is in expanded state.
 				paletteCache["right_mainBody"] = {
@@ -1236,13 +1306,13 @@ var Workbench = {
 				};
 			}
 	
-			if (position == 'left' && !mainBody.tabs.perspective.left) {
-				mainBodyContainer.addChild(mainBody.tabs.perspective.left = 
+			if (position == 'left' && !appBorderContainer.tabs.perspective.left) {
+				appBorderContainer.addChild(appBorderContainer.tabs.perspective.left = 
 					new BorderContainer({'class':'davinciPaletteContainer', 
-						style: 'width: '+paletteTabWidth+'px;', id:"left_mainBody", 
+						style: 'width: '+paletteTabWidth+'px;', id:"left_mainBody", layoutPriority:1,
 						minSize:paletteTabWidth,	// prevent user from dragging splitter too far towards edge
-						region:'left', gutters: false, splitter:true}));
-				mainBody.tabs.perspective.left.startup();
+						region:'leading', gutters: false, splitter:true}));
+				appBorderContainer.tabs.perspective.left.startup();
 				// expandToSize is what expandPaletteContainer() uses as the
 				// width of the palette when it is in expanded state.
 				paletteCache["left_mainBody"] = {
@@ -1256,15 +1326,15 @@ var Workbench = {
 			}
 			var positionSplit = position;
 	
-			if (!mainBody.tabs.perspective[position]) {
+			if (!appBorderContainer.tabs.perspective[position]) {
 				positionSplit = position.split('-');
 	
 				var region = positionSplit[0],
-					parent = mainBodyContainer,
+					parent = appBorderContainer,
 					clazz = 'davinciPalette ',
 					style = '';
 				if (positionSplit[1] && (region == 'left' || region == 'right')) {
-					parent = mainBody.tabs.perspective[region];
+					parent = appBorderContainer.tabs.perspective[region];
 					region = positionSplit[1];
 					if (positionSplit[1] == "top") {
 						region = "center";
@@ -1279,7 +1349,7 @@ var Workbench = {
 				}
 				
 				
-				cp1 = mainBody.tabs.perspective[position] = new TabContainer({
+				cp1 = appBorderContainer.tabs.perspective[position] = new TabContainer({
 					region: region,
 					id:'palette-tabcontainer-'+position,
 					tabPosition:positionSplit[0]+'-h',
@@ -1310,7 +1380,7 @@ var Workbench = {
 					}
 				}.bind(this));
 			} else {
-				cp1 = mainBody.tabs.perspective[position];
+				cp1 = appBorderContainer.tabs.perspective[position];
 			}
 	
 			if (dojo.some(cp1.getChildren(), function(child){ return child.id == view.id; })) {
@@ -1320,8 +1390,8 @@ var Workbench = {
 				this._showViewAddChildInProcess = true;
 				if (!hidden) {
 					cp1.addChild(tab);
-					mainBodyContainer.layout();
-					mainBodyContainer.resize();
+					appBorderContainer.layout();
+					appBorderContainer.resize();
 				}
 				this._showViewAddChildInProcess = false;
 				// Put a tooltip on the tab button. Note that native TabContainer
@@ -1370,18 +1440,18 @@ var Workbench = {
 	},
 
 	hideView: function(viewId){
-		for (var position in mainBody.tabs.perspective) {
+		for (var position in appBorderContainer.tabs.perspective) {
 			if(position=='left' || position == 'right'){
 				position+='-top';
 			}
-			if(!mainBody.tabs.perspective[position]){
+			if(!appBorderContainer.tabs.perspective[position]){
 				continue;
 			}
-			var children = mainBody.tabs.perspective[position].getChildren();
+			var children = appBorderContainer.tabs.perspective[position].getChildren();
 			var found = false;
 			for (var i = 0; i < children.length && !found; i++) {
 				if (children[i].id == viewId) {
-					mainBody.tabs.perspective[position].removeChild(children[i]);
+					appBorderContainer.tabs.perspective[position].removeChild(children[i]);
 					children[i].destroyRecursive(false);
 				}
 			}									
@@ -1854,7 +1924,7 @@ var Workbench = {
 			//No editor, so use the initital perspective
 			palettePerspectiveId = Runtime.initialPerspective || "davinci.ui.main";
 		}
-			
+		var appBorderContainer = dijit.byId('davinci_app');
 		if (palettePerspectiveId) {
 			var palettePerspective = Runtime.getExtension("davinci.perspective", palettePerspectiveId);
 			if (!palettePerspective) {
@@ -1874,8 +1944,11 @@ var Workbench = {
 				var tab = dijit.byId(paletteId);
 				if (tab) {
 					var tabContainer = tab.getParent();
-					var desiredTabContainer = mainBody.tabs.perspective[position];
-					
+					console.debug("position= "+position);
+					var desiredTabContainer = appBorderContainer.tabs.perspective[position];
+					if(!desiredTabContainer){
+						return;
+					}
 					//Move tab
 					if (tabContainer != desiredTabContainer) {
 						if (tabContainer) {

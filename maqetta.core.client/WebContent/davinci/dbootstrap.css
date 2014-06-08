@@ -3950,7 +3950,9 @@ a:hover {
 .claro .dijitAccordionTitle {
 	color: #08c;
 	border-bottom: none;
-	padding: 8px 15px;
+	padding: 2px;
+	font-family: tahoma;
+    font-size: 12px;
 }
 
 .claro .dijitAccordionChildWrapper {
@@ -3981,7 +3983,9 @@ a:hover {
 .claro .dijitButton .dijitButtonNode,.claro .dijitDropDownButton .dijitButtonNode,.claro .dijitComboButton .dijitButtonNode,.claro .dijitToggleButton .dijitButtonNode,.claro .dijitComboBox .dijitButtonNode,.claro .dijitSpinnerButtonContainer.dijitButtonNode,.claro .dijitSelect .dijitButtonNode
 	{
 	display: block;
-	padding: 6px 14px;
+	 height: 12px;
+    margin-bottom: 0;
+    padding: 5px;
 	margin-bottom: 0;
 	font-size: 14px;
 	text-align: center;

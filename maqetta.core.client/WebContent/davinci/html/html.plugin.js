@@ -141,7 +141,8 @@ return {
                 },
                 {
                     viewID: "davinci.ve.style",
-                    position: "right"
+                    position: "right",
+                    hidden: true
                 },
                 {
                     viewID: "davinci.ui.comment",
@@ -150,7 +151,7 @@ return {
                 },
                 {
                     viewID: "davinci.ve.states",
-                    position: "right-bottom",
+                    position: "right",
                     hidden: true
                 },
                 {

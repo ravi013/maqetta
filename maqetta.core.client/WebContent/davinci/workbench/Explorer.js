@@ -183,11 +183,12 @@ return declare("davinci.workbench.Explorer", ViewPart, {
 		projectRowDiv.appendChild(table);
 		var tr = dojo.doc.createElement("tr");
 		table.appendChild(tr);
-		var td0 = domConstruct.create("td", {"class":"explorerHeaderProjectCol0", innerHTML:uiNLS.projectColon});
+		var td0 = domConstruct.create("td", {"class":"explorerHeaderProjectCol0"/*, innerHTML:uiNLS.projectColon*/});
 		tr.appendChild(td0);
 		var td1 = domConstruct.create("td", {"class":"explorerHeaderProjectCol1"});
-		tr.appendChild(td1);
+		
 		var td2 = domConstruct.create("td", {"class":"explorerHeaderProjectCol2"});
+		tr.appendChild(td1);
 		tr.appendChild(td2);
 
 		var projectSelection = new davinci.ui.widgets.ProjectToolbar({});

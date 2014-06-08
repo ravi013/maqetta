@@ -393,16 +393,30 @@ return declare(ToolbaredContainer, {
 	updateToolbars: function(){
 		if(this.editor == Runtime.currentEditor){
 			var toolbarDiv = this.getToolbarDiv();
+			var toolbarBottomDiv = this.getBottomToolbarDiv();
 			if(toolbarDiv){
 				toolbarDiv.innerHTML = '';
+			}
+			if(toolbarBottomDiv){
+				toolbarBottomDiv.innerHTML = '';
 			}
 			var toolbar = this.toolbarCreated(this.editorExtension.editorClass);
 			if(toolbarDiv && toolbar && toolbar.domNode){
 				toolbarDiv.appendChild(toolbar.domNode);
 			}
+			var bottomToolbar = this.toolbarCreated('bottom-'+this.editorExtension.editorClass);
+			if(toolbarBottomDiv && bottomToolbar && bottomToolbar.domNode){
+				toolbarBottomDiv.appendChild(bottomToolbar.domNode);
+			}
+			
 			var editorToolbarNode = dojo.query('#davinci_toolbar_container .dijitToolbar')[0];
 			var editorToolbar = editorToolbarNode ? dijit.byNode(editorToolbarNode) : null;
 			this._updateToolbar(editorToolbar);
+			
+			var editorBottomToolbarNode = dojo.query('#davinci_bottomtoolbar_container .dijitToolbar')[0];
+			var editorBottomToolbar = editorBottomToolbarNode ? dijit.byNode(editorBottomToolbarNode) : null;
+			this._updateToolbar(editorBottomToolbar);
+			
 		}
 	},
 	
@@ -425,7 +439,9 @@ return declare(ToolbaredContainer, {
 	getToolbarDiv: function(){
 		return dojo.byId("davinci_toolbar_container");
 	},
-	
+	getBottomToolbarDiv: function(){
+		return dojo.byId("davinci_bottomtoolbar_container");
+	},
 	/**
 	 * Getter/setting for whether toolbar has been created.
 	 * Note that this function overrides the function from _ToolbaredContainer.js

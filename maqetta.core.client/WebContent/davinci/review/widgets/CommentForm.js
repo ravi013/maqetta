@@ -52,7 +52,8 @@ return declare("davinci.review.widgets.CommentForm", [_Widget, _Templated], {
 
 		var viewActions=this._getActions();
 		var tb=dojo.create("span", {style: {display: "inline-block"}},this.toolbarNode);
-		var toolbar = this._toolbar = davinci.Workbench._createToolBar('toolbarPath', tb, viewActions, this);
+		var tb2=dojo.create("span", {style: {display: "inline-block"}},this.toolbarNode);
+		var toolbar = this._toolbar = davinci.Workbench._createToolBar('toolbarPath', tb,tb2, viewActions, this)[0];
 		dojo.style(toolbar.domNode,{"display":"inline-block"});
 		
 		//Subscribe to changes to the selection state of shapes in the review editor
