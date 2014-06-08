@@ -8,7 +8,6 @@
 		<!--<property name="mapsCheckoutTag" value="HEAD" /> -->
 		<mkdir dir="${buildDirectory}/maps" />
 
-		<!--
 		<exec executable="git" dir="${buildDirectory}/maps">
 			<arg line="archive -format=tar -remote=ssh://dev.eclipse.org/gitroot/orion/org.eclipse.orion.server.git master releng/org.eclipse.orion.releng/maps | tar -xf -" />
 		</exec>
@@ -62,7 +61,7 @@ lastMapTag=${mapsTagTag}
 	<target name="cloneMaqetta">
 			<property name='gitRepoFolder' value="${base}/gitClones/git___github_com_ravi013_maqetta_git"/>
 			<echo message="Fetching and Updating git submodule in ${gitRepoFolder}"/>
-			<delete>
+			<delete quiet="true">
 			<dirset dir="${gitRepoFolder}" />
 			 </delete>
 		 <mkdir dir="${gitRepoFolder}"/>
