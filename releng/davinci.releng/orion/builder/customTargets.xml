@@ -8,6 +8,7 @@
 		<!--<property name="mapsCheckoutTag" value="HEAD" /> -->
 		<mkdir dir="${buildDirectory}/maps" />
 
+		<!--
 		<exec executable="git" dir="${buildDirectory}/maps">
 			<arg line="archive -format=tar -remote=ssh://dev.eclipse.org/gitroot/orion/org.eclipse.orion.server.git master releng/org.eclipse.orion.releng/maps | tar -xf -" />
 		</exec>
@@ -17,7 +18,7 @@
 			
 		<antcall target="compareMapFiles"/>
 		<antcall target="tagMapFiles" />
-
+		-->
 		<copy todir="${buildDirectory}/maps">
 			<fileset dir="${builder}/../maps" />
 		</copy>
