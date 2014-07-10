@@ -8,7 +8,7 @@ rem Path to parent directory of the eclipse application directory.
 rem That is, if eclipse is installed in '/usr/local/eclipse', this property
 rem would be set as 'base="/usr/local"'. No trailing backslash.
 rem
-set base=J:\DEvelopment\eclipse-jee-juno-win32-x86_64\
+set base=D:\MyDEvtools\eclipse-orion-2.0-win32.win32.x86_64
 
 rem
 rem Path to eclipse directory inclusive. The application directory is
@@ -22,7 +22,7 @@ rem Version number of the launcher jar file. See %baseLocation%\plugins\org.ecli
 rem The launcher version is the set of alphanumeric characters between 'launcher_' and the '.' character
 rem before the 'jar' file name suffix.
 rem
-set launcherVersion=1.0.201.R35x_v20090715
+set launcherVersion=1.3.0.v20120522-1813
 
 rem
 rem Directory in which to do the build. No trailing backslash.

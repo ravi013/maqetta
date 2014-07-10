@@ -431,6 +431,13 @@ return {
                            action: "davinci/actions/SelectThemeAction",
                            label: "Switch theme"
                         },
+                        {
+                            id: "highlight",
+                            iconClass: 'selectThemeIcon',
+                            className: "davinciFloatRight",
+                            action: "davinci/actions/SelectThemeAction",
+                            label: "Highlighting"
+                         },
                        {
                            id: "chooseDevice",
                            iconClass: 'deviceIcon',
@@ -518,26 +525,47 @@ return {
                     label: "Add note",
                     toolbarPath: "stickynote"
                 },
-                {
-                    id: "layout",
-                    className: "maqLabelButton davinciFloatRight maqLayoutDropDownButton",
-                    showLabel: true,
-                    label: "Flow",	// will be updated by code
-                    toolbarPath: "undoredo",
-                    type:'ComboButton',
-                    menu:[
-                        {
-                            label: "Flow",
-                            iconClass: "flowLayoutIcon",
-                            method: "selectLayoutFlow"
-                        },
-                        {
-                            label: "Absolute",
-                            iconClass: "absoluteLayoutIcon",
-                            method: "selectLayoutAbsolute"
-                        }
-                   ]
+                
+              /*   {
+                     id: "designmode",
+                     //iconClass: 'designModeIcon editActionIcon',
+                     showLabel: true,
+                     className: 'maqLabelButton davinciFloatLeft modeLeftButton',
+                     action: "davinci/ve/actions/ViewDesignAction",
+                     label: "Design",
+                     toolbarPath: "mode",
+                     keyBinding: {accel: true, charOrCode: "1", allowGlobal: true},
                  },
+                 {
+                     id: "configuremode",
+                     //iconClass: 'designModeIcon editActionIcon',
+                     showLabel: true,
+                     className: 'maqLabelButton davinciFloatLeft modecentreButton',
+                     action: "davinci/ve/actions/ViewDesignAction",
+                     label: "Configure",
+                     toolbarPath: "mode",
+                     keyBinding: {accel: true, charOrCode: "1", allowGlobal: true},
+                 },
+                 {
+                     id: "stylemode",
+                     //iconClass: 'designModeIcon editActionIcon',
+                     showLabel: true,
+                     className: 'maqLabelButton davinciFloatLeft modecentreButton',
+                     action: "davinci/ve/actions/ViewDesignAction",
+                     label: "Style",
+                     toolbarPath: "mode",
+                     keyBinding: {accel: true, charOrCode: "1", allowGlobal: true},
+                 },
+                 {
+                     id: "testmode",
+                     //iconClass: 'designModeIcon editActionIcon',
+                     showLabel: true,
+                     className: 'maqLabelButton davinciFloatLeft modeRightButton',
+                     action: "davinci/ve/actions/ViewDesignAction",
+                     label: "Test",
+                     toolbarPath: "mode",
+                     keyBinding: {accel: true, charOrCode: "1", allowGlobal: true},
+                 },*/
                 {
                     id: "sourcecombo",
                     className: "maqLabelButton davinciFloatRight maqSourceComboButton",
@@ -588,6 +616,48 @@ return {
                     },
                     keyBinding: {accel: true, shift: true, charOrCode: "w", allowGlobal: true}
                 },
+                {
+                    id: "layout",
+                    className: "maqLabelButton davinciFloatRight maqLayoutDropDownButton",
+                    showLabel: true,
+                    label: "Flow",	// will be updated by code
+                    toolbarPath: "undoredo",
+                    type:'ComboButton',
+                    toolBarType:"bottom",
+                    menu:[
+                        {
+                            label: "Flow",
+                            iconClass: "flowLayoutIcon",
+                            method: "selectLayoutFlow"
+                        },
+                        {
+                            label: "Absolute",
+                            iconClass: "absoluteLayoutIcon",
+                            method: "selectLayoutAbsolute"
+                        }
+                   ]
+                 },
+                 {
+                     id: "switchdevice",
+                     className: "maqLabelButton davinciFloatRight maqLayoutDropDownButton",
+                     showLabel: true,
+                     label: "Desktop",	// will be updated by code
+                     toolbarPath: "undoredo",
+                     type:'ComboButton',
+                     toolBarType:"bottom",
+                     menu:[
+                         {
+                             label: "Desktop",
+                             iconClass: "flowLayoutIcon",
+                             method: "selectLayoutFlow"
+                         },
+                         {
+                             label: "Ipad",
+                             iconClass: "absoluteLayoutIcon",
+                             method: "selectLayoutAbsolute"
+                         }
+                    ]
+                  },
                 {
                     id: "showWidgetsPalette",
                     run: function() {

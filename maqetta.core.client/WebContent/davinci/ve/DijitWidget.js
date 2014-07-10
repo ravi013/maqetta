@@ -86,6 +86,7 @@ return declare("davinci.ve.DijitWidget", _Widget, {
 		var allowedChild = davinci.ve.metadata.getAllowedChild(this.type);
 		this.acceptsHTMLChildren = allowedChild[0] === 'ANY' ||
 								   allowedChild.toString().toUpperCase().indexOf('HTML') !== -1;
+		console.debug("acceptsHTMLChildren "+this.acceptsHTMLChildren)
 		this.dijitWidget=dijitWidget;
 		this.containerNode=dijitWidget.containerNode;
 		this.styleNode=dijitWidget.styleNode;
@@ -124,6 +125,7 @@ return declare("davinci.ve.DijitWidget", _Widget, {
 				// widget need to put this property on any child widgets that the Maqetta
 				// page editor needs to ignore.
 				// FIXME: There has to be a cleaner way of doing this.
+				console.debug("child._maqNotDVWidget "+child._maqNotDVWidget);
 				if(!child._maqNotDVWidget){
 					if (attach) {
 						children.push(require("davinci/ve/widget").getWidget(child.domNode));

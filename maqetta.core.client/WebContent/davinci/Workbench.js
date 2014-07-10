@@ -569,12 +569,7 @@ var Workbench = {
 		var menuTree = Workbench._createMenuTree();	// no params means include "everything else"
 		Workbench._updateMainMenubar(dojo.byId('davinci_main_menu'), menuTree);
 
-		var o = this.getActionSets('davinci.ui.editorMenuBar');
-		var clonedActionSets = o.clonedActionSets;
-		if(clonedActionSets.length){
-			menuTree = Workbench._createMenuTree(clonedActionSets);
-			Workbench._updateMainMenubar(dojo.byId('maq_banner_editor_commands'), menuTree);
-		}
+		
 
 		var mainBody = dojo.byId('mainBody');
 	
@@ -745,36 +740,15 @@ var Workbench = {
 			 var  pMenuBar = new MenuBar({
 			    	id:'davinci_menu_bar',
 			    });
+			 var o = this.getActionSets('davinci.ui.editorMenuBar');
+				var clonedActionSets = o.clonedActionSets;
+				if(clonedActionSets.length){
+					menuTree = Workbench._createMenuTree(clonedActionSets);
+					//Workbench._updateMainMenubar(dojo.byId('maq_banner_editor_commands'), menuTree);
+					Workbench._addItemsToMenubar(menuTree, pMenuBar);
+				}
 
-			 var pSubMenu = new DropDownMenu({});
-			    pSubMenu.addChild(new MenuItem({
-			        label: "File item #1"
-			    }));
-			    pSubMenu.addChild(new MenuItem({
-			        label: "File item #2"
-			    }));
-			    pMenuBar.addChild(new PopupMenuBarItem({
-			        label: "File",
-			        popup: pSubMenu
-			    }));
-
-			    var pSubMenu2 = new DropDownMenu({});
-			    pSubMenu2.addChild(new MenuItem({
-			        label: "Cut",
-			        iconClass: "dijitEditorIcon dijitEditorIconCut"
-			    }));
-			    pSubMenu2.addChild(new MenuItem({
-			        label: "Copy",
-			        iconClass: "dijitEditorIcon dijitEditorIconCopy"
-			    }));
-			    pSubMenu2.addChild(new MenuItem({
-			        label: "Paste",
-			        iconClass: "dijitEditorIcon dijitEditorIconPaste"
-			    }));
-			    pMenuBar.addChild(new PopupMenuBarItem({
-			        label: "Edit",
-			        popup: pSubMenu2
-			    }));
+			
 			    
 			var menubarPane = new ContentPane({
 				id:'davinci_menubar_pane',

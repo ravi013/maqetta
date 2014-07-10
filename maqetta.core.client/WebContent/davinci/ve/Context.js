@@ -37,7 +37,9 @@ define([
 	"./utils/GeomUtils",
 	"dojo/text!./newfile.template.html",
 	"./utils/pseudoClass",
+	"davinci/html/HTMLImport",	
 	"dojox/html/_base"	// for dojox.html.evalInGlobal	
+
 ], function(
 	require,
 	declare,
@@ -76,7 +78,8 @@ define([
 	Silhouette,
 	GeomUtils,
 	newFileTemplate,
-	pseudoClass
+	pseudoClass,
+	HTMLImport
 ) {
 
 davinci.ve._preferences = {}; //FIXME: belongs in another object with a proper dependency
@@ -130,7 +133,12 @@ var removeHrefAttribute = function(node) {
 	if(node.tagName.toUpperCase() == "A" && node.hasAttribute("href")){
 		node.removeAttribute("href");
 	}
+	if(node.tagName.toUpperCase() == "DIV" && node.hasAttribute("href")){
+		node.removeAttribute("href");
+	}
 };
+
+
 
 return declare("davinci.ve.Context", [ThemeModifier], {
 
@@ -157,7 +165,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 		this._contentStyleSheet = Workbench.location() + require.toUrl("davinci/ve/resources/content.css");
 		this._id = "_edit_context_" + contextCount++;
 		this.widgetHash = {};
-		
+		this.innerDocuments=new Array();
 		lang.mixin(this, args);
 
 		if(typeof this.containerNode == "string"){
@@ -227,12 +235,13 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 		this.loadStyleSheet(this._contentStyleSheet);
 		this._attachAll();
 		this._restoreStates();
-
+		var context=this;
 		query("*",this.rootNode).forEach(function(n){
 			// Strip off interactivity features from DOM on canvas
 			// Still present in model
 			removeEventAttributes(n);	// Make doubly sure there are no event attributes (was also done on original source)
 			removeHrefAttribute(n);		// Remove href attributes on A elements
+			//updateHrefElements(n,context);
 		});
 		this._AppStatesActivateActions();
 		// The initialization of states object for BODY happens as part of user document onload process,
@@ -299,6 +308,15 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 		if(!widget._srcElement){
 			widget._srcElement=this._srcDocument.findElement(widget.id);
 		}
+		
+		if(!widget._srcElement){
+			dojo.forEach(this._srcDocument.htmlFiles, function(doc){
+				console.debug("doc. fileName "+doc.fileName);
+				widget._srcElement=doc.findElement(widget.id);
+				if(widget._srcElement){return;}
+			}, this);
+		}
+	
 		// The following two assignments needed for OpenAjax widget support
 		if(!widget.type){
 			if(widget.isHtmlWidget){
@@ -316,7 +334,10 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 		widget._edit_context = this;
 		
 		widget.attach();
-
+		console.debug("widget.id "+widget.id);
+		console.debug("widget.type "+widget.type);
+		console.debug("widget._srcElement "+widget._srcElement);
+		
 		//TODO: dijit-specific convention of "private" widgets
 		if(widget.type.charAt(widget.type.lastIndexOf(".") + 1) == "_"){
 			widget.internal = true;
@@ -902,6 +923,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 		});
 		
 		var data = this._parse(source);
+		console.debug("data "+data.content);
 		if (this.frameNode) {
 			if(!this.getGlobal()){
 				console.warn("Context._setContent called during initialization");
@@ -1051,7 +1073,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 					win.require("dojo/_base/lang").isArray = win.dojo.isArray=function(it){
 						return it && Object.prototype.toString.call(it)=="[object Array]";
 					};
-
+					console.debug("win "+win);
 					// Add module paths for all folders in lib/custom (or wherever custom widgets are stored)
 					win.require({
 						packages: this._customWidgetPackages
@@ -1074,6 +1096,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 				}
 			);
 			doc.write(content);
+			console.debug("content ="+content);
 			doc.close();
 
 			// intercept BS key - prompt user before navigating backwards
@@ -1205,6 +1228,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 	},
 
 	_setSourceData: function(data) {
+		console.debug("step 1");
 		// cache the theme metadata
 		this.themeChanged();
 		var theme = this.getThemeMeta();
@@ -1285,23 +1309,33 @@ return declare("davinci.ve.Context", [ThemeModifier], {
                 this.inherited('onEnd', arguments);
 	        }
 	    });
-
+	   // console.debug("scripts "+scripts);
 		// Remove "on*" event attributes from editor DOM.
 		// They are already in the model. So, they will not be lost.
 		removeEventAttributes(containerNode);
+		//updateHrefElements(containerNode,this);
 		query("*",containerNode).forEach(removeEventAttributes);
-
+		var promiseArry=[];
+		var context=this;
+		query("*",containerNode).forEach(function(n){
+		var promise=context.updateHrefElements(n,context);
+		promiseArry.push(promise);
+		console.debug("step 2");
+		});
+		var deferred=new Deferred();
+		all(promiseArry).then(function() {
+			console.debug("step 3");
 		// Convert all text nodes that only contain white space to empty strings
 		containerNode.setAttribute('data-maq-ws','collapse');
-		var modelBodyElement = this._srcDocument.getDocumentElement().getChildElement("body");
+		var modelBodyElement = context._srcDocument.getDocumentElement().getChildElement("body");
 		if (modelBodyElement) {
 			modelBodyElement.addAttribute('data-maq-ws', 'collapse');	
 		}
 
 		// Set the mobile agaent if there is a device on the body
 		// We need to ensure it is set before the require of deviceTheme is executed
-		var djConfig = this.getGlobal().dojo.config;  // TODO: use require
-		var bodyElement = this.getDocumentElement().getChildElement("body");
+		var djConfig = context.getGlobal().dojo.config;  // TODO: use require
+		var bodyElement = context.getDocumentElement().getChildElement("body");
 		var device = bodyElement && bodyElement.getAttribute(MOBILE_DEV_ATTR);
 		if (device && djConfig) {
 			djConfig.mblUserAgent = Silhouette.getMobileTheme(device + '.svg') || "other";
@@ -1323,9 +1357,124 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 			});
 		};
 		collapse(containerNode);
-		this._loadFileStatesCache = states;
-		return this._processWidgets(containerNode, active, this._loadFileStatesCache, scripts);		
+		context._loadFileStatesCache = states;
+		context._processWidgets(containerNode, active, context._loadFileStatesCache, scripts).then(function() {deferred.resolve(); 
+		console.debug("step 4");},function() {deferred.reject(); });	},function() {deferred.reject(); });
+		return deferred;
 	},
+	_setInnerSourceData: function(node,data,htmlFile) {
+
+
+	/*	this.setHeader({
+			title: data.title,
+			scripts: data.scripts,
+			modules: data.modules,
+			styleSheets: data.styleSheets,
+			//className: data.className,
+			
+			bodyClasses: data.bodyClasses,
+//FIXME: Research setHeader - doesn't seem to use states info
+/*
+			maqAppStates: data.maqAppStates,
+			maqDeltas: data.maqDeltas,
+
+			style: data.style
+		});*/
+
+		var content = data.content || "";
+		
+	/*	var active =false;
+		if(active){
+			this.select(null);
+			this.getTopWidgets().forEach(this.detach, this);
+		}
+		var states = {};
+		  
+
+		if (data.maqAppStates) {
+			states.body = data.maqAppStates;
+		}
+		this.getTopWidgets().forEach(function(w){
+			if(w.getContext()){
+				w.destroyWidget();
+			}
+		});
+
+		// remove all registered widgets
+        this.getGlobal().dijit.registry.forEach(function(w) { //FIXME: use require?
+              w.destroy();           
+        });
+      */  
+        //FIXME: Temporary fix for #3030. Strip out any </br> elements
+        //before stuffing the content into the document.
+        content = content.replace(/<\s*\/\s*br\s*>/gi, "");
+
+        // Set content
+		//  Content may contain inline scripts. We use dojox.html.set() to pull
+		// out those scripts and execute them later, after _processWidgets()
+		// has loaded any required resources (i.e. <head> scripts)
+		var scripts;
+        // It is necessary to run the dojox.html.set utility from the context
+	    // of inner frame.  Might be a Dojo bug in _toDom().
+	    this.getGlobal()['require']('dojox/html/_base').set(node, content, {
+	        executeScripts: true,
+	        onEnd: function() {
+	            // save any scripts for later execution
+	            scripts = this._code;
+	            this.executeScripts = false;
+                this.inherited('onEnd', arguments);
+	        }
+	    });
+	   // console.debug("scripts "+scripts);
+		// Remove "on*" event attributes from editor DOM.
+		// They are already in the model. So, they will not be lost.
+		removeEventAttributes(node);
+		//updateHrefElements(node,this);
+		query("*",node).forEach(removeEventAttributes);
+		var context=this;
+		var promiseArry=[]; 
+		query("*",node).forEach(function(n){
+			var promise=context.updateHrefElements(n,context);
+			promiseArry.push(promise);
+		});	
+		var deferred=new Deferred();
+		all(promiseArry).then(function() {
+		// Convert all text nodes that only contain white space to empty strings
+		node.setAttribute('data-maq-ws','collapse');
+		var modelBodyElement = htmlFile.getDocumentElement().getChildElement("body");
+		if (modelBodyElement) {
+			modelBodyElement.addAttribute('data-maq-ws', 'collapse');	
+		}
+
+		// Set the mobile agaent if there is a device on the body
+		// We need to ensure it is set before the require of deviceTheme is executed
+		var djConfig = context.getGlobal().dojo.config;  // TODO: use require
+		var bodyElement = context.getDocumentElement().getChildElement("body");
+		var device = bodyElement && bodyElement.getAttribute(MOBILE_DEV_ATTR);
+		if (device && djConfig) {
+			djConfig.mblUserAgent = Silhouette.getMobileTheme(device + '.svg') || "other";
+		} 
+				
+		// Collapses all text nodes that only contain white space characters into empty string.
+		// Skips certain nodes where whitespace does not impact layout and would cause unnecessary processing.
+		// Similar to features that hopefully will appear in CSS3 via white-space-collapse.
+		// Code is also injected into the page via workbench/davinci/davinci.js to do this at runtime.
+		var skip = {SCRIPT:1, STYLE:1},
+			collapse = function(element) {
+			dojo.forEach(element.childNodes, function(cn){
+				if (cn.nodeType == 3){	// Text node
+					//FIXME: exclusion for SCRIPT, CSS content?
+					cn.nodeValue = cn.data.replace(/^[\f\n\r\t\v\ ]+$/g,"");
+				}else if (cn.nodeType == 1 && !skip[cn.nodeName]){ // Element node
+					collapse(cn);
+				}
+			});
+		};
+		collapse(node);
+		context._processWidgets(node, true, context._loadFileStatesCache, scripts,htmlFile).then(function() {deferred.resolve(); 
+		console.debug("step 4");},function() {deferred.reject(); });	},function() {deferred.reject(); });
+		return deferred;
+		},
 
 	/**
 	 * Invoked when the page associated with this Context has finished its
@@ -1376,75 +1525,94 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 	/**
 	 * Process dojoType, oawidget and dvwidget attributes on text content for containerNode
 	 */
-	_processWidgets: function(containerNode, attachWidgets, states, scripts) {
-		var prereqs = [];
+	_processWidgets: function(containerNode, attachWidgets, states, scripts,htmlFile) {
+		console.trace();
+		var prereqs = [];		
+		var deferred2=new Deferred();
 		this._loadFileDojoTypesCache = {};
+		var context=this;
 		dojo.forEach(query("*", containerNode), function(n){
 			var type =  n.getAttribute("data-dojo-type") || n.getAttribute("dojoType") || /*n.getAttribute("oawidget") ||*/ n.getAttribute("dvwidget");
+			console.debug("href type "+type);
+			var href=n.getAttribute("href");
+			if(href && href!=""){
+				n.setAttribute('href', '');	
+				n.setAttribute('hhref', href);	
+				var hrefUrl=this.getPath().getParentPath()+"/"+href;
+				console.debug("href path "+hrefUrl);
+
+				
+			}
+			
 			//FIXME: This logic assume that if it doesn't have a dojo type attribute, then it's an HTML widget
 			//Need to generalize to have a check for all possible widget type designators
 			//(dojo and otherwise)
 			if(!type){
 				type = 'html.' + n.tagName.toLowerCase();
+				console.debug("href type "+type);
 			}
 			//doUpdateModelDojoRequires=true forces the SCRIPT tag with dojo.require() elements
 			//to always check that scriptAdditions includes the dojo.require() for this widget.
 			//Cleans up after a bug we had (7714) where model wasn't getting updated, so
 			//we had old files that were missing some of their dojo.require() statements.
-			prereqs.push(this.loadRequires((type||"").replace(/\./g, "/"), false/*doUpdateModel*/, true/*doUpdateModelDojoRequires*/));
-			prereqs.push(this._preProcess(n));
+			prereqs.push(context.loadRequires((type||"").replace(/\./g, "/"), false/*doUpdateModel*/, true/*doUpdateModelDojoRequires*/));
+			prereqs.push(context._preProcess(n));
 //			this.resolveUrl(n);
-			this._preserveStates(n, states);
-			this._preserveDojoTypes(n);
+			context._preserveStates(n, states);
+			context._preserveDojoTypes(n);
+			deferred2.resolve();
+			
 		}, this);
+		
 		var promise = new Deferred();
+		deferred2.then(function() {
 		all(prereqs).then(function() {
 			//FIXME: dojo/ready call may no longer be necessary, now that parser requires its own modules
-			this.getGlobal()["require"]("dojo/ready")(function(){
+			context.getGlobal()["require"]("dojo/ready")(function(){
 				try {
 					// M8: Temporary hack for #3584.  Should be moved to a helper method if we continue to need this.
 					// Because of a race condition, override _getValuesAttr with a fixed value rather than querying
 					// individual slots.
 					try {
-						var sws = this.getGlobal()["require"]("dojox/mobile/SpinWheelSlot");
+						var sws = context.getGlobal()["require"]("dojox/mobile/SpinWheelSlot");
 						if (sws && sws.prototype && !sws.prototype._hacked) {
 							sws.prototype._hacked = true;
 							console.warn("Patch SpinWheelSlot");
 							var keySuper = sws.prototype._getKeyAttr;
 							sws.prototype._getKeyAttr = function() {
-		                        if(!this._started) { 
-		                        	if(this.items) {
-		                        		for(var i = 0; i < this.items.length; i++) {
-		                        			if(this.items[i][1] == this.value) {
-		                        				return this.items[i][0];
+		                        if(!context._started) { 
+		                        	if(context.items) {
+		                        		for(var i = 0; i < context.items.length; i++) {
+		                        			if(context.items[i][1] == context.value) {
+		                        				return context.items[i][0];
 		                        			}
 		                        		}
 		                        	}
 		                        	return null;
 		                        }
-		                        return keySuper.apply(this);
+		                        return keySuper.apply(context);
 							};
 							var valueSuper = sws.prototype._getValueAttr;
 							sws.prototype._getValueAttr = function() {
-		                        if(!this._started){ 
-		                        	return this.value;
+		                        if(!context._started){ 
+		                        	return context.value;
 		                        }
-		                        return valueSuper.apply(this) || this.value;
+		                        return valueSuper.apply(context) || context.value;
 							};
 						}
 					}catch(e){
 						// ignore
 					}
-
-					this.getGlobal()["require"]("dojo/parser").parse(containerNode).then(function(){
+				
+					context.getGlobal()["require"]("dojo/parser").parse(containerNode).then(function(){
 						// In some cases, parser wipes out the data-dojo-type. But we need
 						// the widget type in order to do our widget initialization logic.
-						this._restoreDojoTypes();	
+						context._restoreDojoTypes();	
 
 						promise.resolve();
 
 						if(attachWidgets){
-							this._attachAll();
+							context._attachAll(containerNode,htmlFile);
 						}
 			
 				        if (scripts) {
@@ -1454,7 +1622,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 				                console.error('Error eval script in Context._setSourceData, ' + e);
 				            }
 				        }
-					}.bind(this), function(e){
+					}.bind(context), function(e){
 						promise.reject(e);
 					});
 				} catch(e) {
@@ -1480,7 +1648,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 					this, '_editorSelectionChange');			
 		});
 		*/
-
+		});
 		return promise;
 	},
 	
@@ -1511,8 +1679,18 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 		}
 	},
 
-	_attachAll: function()
+	_attachAll: function(containerNode,htmlFile)
 	{
+		if(htmlFile)
+		{		
+			if(!this._srcDocument.htmlFiles){
+				this._srcDocument.htmlFiles=new Array;
+			}
+			this._srcDocument.htmlFiles.push(htmlFile);
+			this._attachChildren(containerNode);
+			return;
+		}
+		console.debug("htmlFile"+htmlFile);
 		var rootWidget=this.rootWidget=new HTMLWidget({},this.rootNode);
 		rootWidget._edit_context=this;
 		rootWidget.isRoot=true;
@@ -1522,7 +1700,8 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 	},
 
 	_attachChildren: function (containerNode){
-		query("> *", containerNode).map(Widget.getWidget).forEach(this.attach, this);
+		console.debug("containerNode "+containerNode);
+		query("> *", containerNode).map(Widget.getWidget).forEach(this.attach, this);	
 	},
 	
 	/**
@@ -1742,6 +1921,9 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 
 	// preserve states specified to node
 	_preserveStates: function(node, cache){
+		if(!cache){
+			return;
+		}
 		var statesAttributes = davinci.ve.states.retrieve(node);
 //FIXME: Need to generalize this to any states container
 		if (node.tagName.toUpperCase() != "BODY" && (statesAttributes.maqAppStates || statesAttributes.maqDeltas)) {
@@ -2409,10 +2591,16 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 	},
 
 	onMouseDown: function(event){
+		
+		var node=event.target;
+		//this._attachChildren(node);
+		
 		if(this._activeTool && this._activeTool.onMouseDown && !this._blockChange){
 			this._activeTool.onMouseDown(event);
 		}
 		this.blockChange(false);
+		
+		//console.debug("node._dvWidget.type "+node._dvWidget.id+" "+node._dvWidget.type);
 	},
 	
 	onDblClick: function(event){
@@ -2422,6 +2610,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 		if(this._activeTool && this._activeTool.onMouseMove && !this._blockChange){
 			this._activeTool.onMouseMove(event);
 		}
+		
 	},
 
 	onMouseUp: function(event){
@@ -2464,7 +2653,8 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 		 	htmlElement = source.getDocumentElement(),
 		 	head = htmlElement.getChildElement("head"),
 		 	bodyElement = htmlElement.getChildElement("body");
-
+		console.debug( "elementType "+bodyElement.elementType);
+		console.debug( "tag "+bodyElement.tag);
 		this._uniqueIDs = {};
 		if (bodyElement) {
 			bodyElement.visit({ visit: dojo.hitch(this, function(element) {
@@ -2472,7 +2662,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 					this.getUniqueID(element);
 				}
 			})});
-			var classAttr = bodyElement.getAttribute("class");
+			var classAttr = bodyElement.getAttribute && bodyElement.getAttribute("class");
 			if (classAttr) {
 				data.bodyClasses = classAttr;
 				/*
@@ -2485,8 +2675,8 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 				});
 				*/
 			}
-			data.style = bodyElement.getAttribute("style");
-			data.content = bodyElement.getElementText({includeNoPersist:true, excludeIgnoredContent:true});
+			data.style =bodyElement.getAttribute &&  bodyElement.getAttribute("style");
+			data.content = bodyElement.getElementText({includeNoPersist:true, excludeIgnoredContent:true},2);
 
 //FIXME: Need to generalize beyond just BODY
 			var states = bodyElement.getAttribute(davinci.ve.states.APPSTATES_ATTRIBUTE);
@@ -2508,6 +2698,9 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 		}
 		
 		var scriptTags=head.getChildElements("script");
+		var bodyscriptTags=bodyElement.getChildElements("script",true);
+		console.debug("bodyscriptTags "+bodyscriptTags && bodyscriptTags.length);
+		scriptTags=scriptTags.concat(bodyscriptTags);
 		dojo.forEach(scriptTags, function (scriptTag){
 			var value=scriptTag.getAttribute("src");
 			if (value) {
@@ -2752,7 +2945,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 		 var id = node.getAttribute("id");
 		 if (!id) {
 			 var userDoc = this.rootWidget ? this.rootWidget.domNode.ownerDocument : null,
-			 	root = idRoot || node.tag,
+			 	root = idRoot || node.tag,filename=node && node.getHTMLFile() &&node.getHTMLFile().fileName,
 			 	num;
 
 			 while(1){
@@ -2761,7 +2954,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 				 } else {
 					 num = ++this._uniqueIDs[root];
 				 }
-				 id = root + "_" + num;	
+				 id = filename+"_"+root + "_" + num;	
 				 if(userDoc){
 					 // If this is called when user doc is available,
 					 // make sure this ID is unique
@@ -3531,6 +3724,53 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 			}
 		}, this);
 	},
+	updateHrefElements: function(node,context) {
+		var promise=new Deferred();
+		try{
+			
+			var href=node.getAttribute("href");
+			if(href && href!=""){
+				
+		
+			var hrefUrl=context.getPath().getParentPath()+"/"+href;
+			console.debug("updateHrefElements href path "+hrefUrl);
+			var innerFrame=new HTMLImport();
+			innerFrame.url = hrefUrl;
+			
+			//node.lastElement.addChild(innerFrame, undefined, true);
+			var defered=innerFrame.load();
+			if(defered)
+				{
+				defered.then(function() {
+					context.innerDocuments.push(innerFrame.htmlFile);
+				var data = context._parse(innerFrame.htmlFile);
+				node.innerSrcElement=innerFrame.htmlFile.getDocumentElement().getChildElement("body");			
+				context._setInnerSourceData(node,data,innerFrame.htmlFile).then(function() {				
+					console.debug("updateHrefElements _srcElement"+node._srcElement);
+					promise.resolve();
+				});
+				
+
+			});}else{
+				var data = context._parse(innerFrame.htmlFile);
+				node.innerSrcElement=innerFrame.htmlFile.getDocumentElement().getChildElement("body");
+				context._setInnerSourceData(node,data,innerFrame.htmlFile).then(function() {
+					
+					console.debug("updateHrefElements _srcElement"+node._srcElement);
+					promise.resolve();
+				});		
+			}
+			
+			}else{
+				promise.resolve();
+			}
+			}catch(e){
+				console.error("error");
+				console.error(e);
+				promise.reject();
+			}
+			return promise;
+	}
 
 });
 

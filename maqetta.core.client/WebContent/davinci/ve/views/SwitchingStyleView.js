@@ -560,7 +560,7 @@ return declare("davinci.ve.views.SwitchingStyleView", [WidgetLite], {
 */
 		if(!this._alreadySplitIntoMultipleTabs){
 			var parentTabContainer = this.getParent();
-			 this.styleTab = new AccordionContainer ({},"style_sections_container");//TabContainer(); 
+			 this.styleTab = new AccordionContainer ({style:"height: 100%;width:100%"},"style_sections_container");//TabContainer(); 
 			 // domConstruct.place(this.styleTab.domNode , this.domNode);
 			  this.styleTab.startup();
 			 //this.addChild(this.styleTab);		

@@ -409,18 +409,27 @@ var VisualEditor = declare("davinci.ve.VisualEditor",  null,  {
 		}
 
 		var promises = [],
-			model = this.context.getModel();
+			model = this.context.getModel(),innermodels=model.htmlFiles;
 		model.setDirty(true);
+		//innermodels.push(model);
+	
+		
 		var visitor = {
 			visit: function(node){
-				if((node.elementType == "HTMLFile" || node.elementType == "CSSFile") && node.isDirty()){
+				if((node.elementType == "HTMLFile") ){//&& node.isDirty()
+					console.debug("Saving "+node.elementType);
+					node.setDirty(true);
 					promises.push(node.save(isAutoSave));
 				}
 				return false;
 			}
 		};
-
 		model.visit(visitor);
+		dojo.forEach(innermodels, function(innerModel){
+			innerModel.setDirty(true);
+			innerModel.visit(visitor);
+		}, this);
+		
 		promises = promises.concat(this.getContext().saveDynamicCssFiles(this.context.cssFiles, isAutoSave));
 		if (promises.length) {
 			this.savePromise = all(promises);

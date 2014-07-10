@@ -1,5 +1,5 @@
-define(["dojo/_base/connect", "dojo/dom-style", "dojo/dom", "dojo/_base/html", "dojo/_base/window", "dojo/_base/array", "dojo/parser", "require", "dojo/json", "dojo/_base/lang"], 
-function(connect, domStyle, dom, dhtml, dwindow, darray, dparser, require, JSON, lang){ // needed for IE9 compat view mode
+define(["dojo/_base/connect", "dojo/dom-style", "dojo/dom", "dojo/_base/html", "dojo/_base/window", "dojo/_base/array", "dojo/parser", "require", "dojo/json", "dojo/_base/lang","davinci/ve/widget"], 
+function(connect, domStyle, dom, dhtml, dwindow, darray, dparser, require, JSON, lang,Widget){ // needed for IE9 compat view mode
 
 var States = function(){};
 States.prototype = {
@@ -486,7 +486,17 @@ States.prototype = {
 		}
 		return newStyleArray;
 	},
-	
+	getHref: function(node, statesList /*FIXME state */, name) {
+		var href;
+//FIXME: Make sure node and statesList are always sent to getStyle
+		for(var i=0; i<statesList.length; i++){
+			var state = statesList[i];
+			// return all styles specific to this state
+			href = node && node._maqDeltas && node._maqDeltas[state] && node._maqDeltas[state].href;
+
+		}
+		return href;
+	},
 	/**
 	 * Returns true if the CSS property "name" is defined on the given node for the given "state".
 	 * style values for the given node and the given application "state".
@@ -728,11 +738,32 @@ States.prototype = {
 			return;
 		}
 
+		console.debug("states "+statesArray);
 		var newStatesList = this._getStatesListUsingPropName(statesArray, 'newState');
 		var styleArray = this.getStyle(node, newStatesList);
-		
+		var href = this.getHref(node, newStatesList);
 		this._resetAndCacheNormalStyle(node, statesArray);
 
+		if(href){
+			var widget= Widget.byId(node.id);
+			var context=node._dvWidget._edit_context;
+			console.debug("node.id "+node.id);
+			//widget.dijitWidget.set("href", href);
+			if(node.id){
+				var dojonode=context.getDojo().byId(node.id);
+				if(dojonode){
+				var widgets=context.getDijit().findWidgets(dojonode);
+				if(widgets && widgets.length>0)
+					dojo.forEach(widgets, function(w) {
+					    w.destroyRecursive();
+					});
+			}}
+			
+			node.setAttribute("href",href);
+			context.updateHrefElements(node,context);
+
+					
+		}
 		// Apply new style
 		if(styleArray){
 			for(var i=0; i<styleArray.length; i++){

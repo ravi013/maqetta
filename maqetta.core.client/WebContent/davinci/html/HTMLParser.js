@@ -4,10 +4,12 @@ define([
 	"davinci/html/HTMLElement",
 	"davinci/html/HTMLAttribute",
 	"davinci/html/HTMLComment",
+	"davinci/html/HTMLImport",
 	"davinci/html/PHPBlock",
 	"davinci/model/parser/Tokenizer",
-	"davinci/html/CSSParser"
-], function(declare, HTMLText, HTMLElement, HTMLAttribute, HTMLComment, PHPBlock, Tokenizer, CSSParser) {
+	"davinci/html/CSSParser",
+	"davinci/model/Path",
+], function(declare, HTMLText, HTMLElement, HTMLAttribute, HTMLComment,HTMLImport, PHPBlock, Tokenizer, CSSParser,Path) {
 
 /* This file defines an XML parser, with a few kludges to make it
  * useable for HTML. autoSelfClosers defines a set of tag names that
@@ -329,6 +331,8 @@ var XMLParser  = (function() {
 })();
 
 var parse = function(text, parentElement) {
+	
+	console.debug("parsing txt "+arguments.callee.caller.name  );
 	var txtStream = { next : function () {if (++this.count==1)  return text; else {throw StopIteration;}} , count:0, text:text};
 	var stream = Tokenizer.stringStream(txtStream);
 	var parser = XMLParser.make(stream);
@@ -390,7 +394,49 @@ var parse = function(text, parentElement) {
 		}
 		CSSParser.parse(stream, lastElement);
 	}
+	
+	function parseInnerFrame(url)  {
+		if(this.innerHtmlFile && this.innerHtmlFile[url])
+			{//return;
+			
+			}
+		stream.nextWhileMatches(/[\s\u00a0]/);
+		var str = stream.get();
+		console.debug("str"+str);
+		
+		if(!this.innerHtmlFile){
+			this.innerHtmlFile=[];
+		}
+		var lastElement = stack[stack.length-1];
+		if(lastElement.hasHTMLImport){
+			
+			return;
+		}
+		//stream.nextWhileMatches(/[\s\u00a0]/);
+	//	var str = stream.get();
+		var p = parentElement;
+		
 
+		var path = new Path(p.url || p.fileName);
+		path = path.getParentPath().append(url);
+		var myUrl = path.toString();
+		
+		var innerFrame=HTMLImport();
+		innerFrame.url = myUrl;
+		
+       	// have to use the require or we get a circular dependency 
+	/*	this.innerHtmlFile[url] = require("davinci/model/Factory").getModel({
+			url : myUrl,
+			loader : parentElement.loader,
+			includeImports : parentElement.includeImports 
+		});*/
+		//console.debug("this.innerHtmlFile "+this.innerHtmlFile[url]+"\n"+myUrl);
+		lastElement.addChild(innerFrame, undefined, true);
+	//	innerFrame.load(true);
+		lastElement.hasHTMLImport=true;
+		
+		
+	}
 	function nextToken(ignoreWS) {
 		token = parser.next();
 		while (ignoreWS &&  token.style == "whitespace") {
@@ -403,6 +449,7 @@ var parse = function(text, parentElement) {
 		do {
 			token = parser.next();
 			switch (token.style) {
+			
 			case "xml-punctuation" : {
 				updateText();
 				if (token.content == "<") {
@@ -415,13 +462,14 @@ var parse = function(text, parentElement) {
 						model.tag = token.content;
 					else
 						error("expecting tag name");
-
+					var isInnerFrame=false,innerHref;
 					while ((token = nextToken(true)).style == "xml-attname") {
 						var attribute = new HTMLAttribute();
 						attribute.wasParsed = true;
 						model.attributes.push(attribute);
 						attribute.name = token.content;
 						attribute.startOffset = token.offset;
+
 						nextToken(true);
 						if (token.content == "=") {
 							token = parser.next();
@@ -437,6 +485,7 @@ var parse = function(text, parentElement) {
 							attribute.setValue(true);
 						}
 						attribute.endOffset = token.offset-1;
+
 						if (attribute.noValue && token.style != "xml-attname")
 							break;
 					}
@@ -455,6 +504,7 @@ var parse = function(text, parentElement) {
 					if (model.tag == "style") {
 						parseStyle();
 					}
+
 
 				} else if (token.value == "</") {
 					var prevModel = model;

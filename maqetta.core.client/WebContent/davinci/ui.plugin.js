@@ -106,40 +106,49 @@ return {
                {
                    __mainMenu: true,
                    separator: [
-                       "new", false, "open", false
+                       "file", false, "edit", false,"view",false,"helpMain",false
                    ]
                },
                {
-                   label: "Create",
-                   path: "new",
+                   label: "File",
+                   path: "file",
                    id: "davinci.new",
                    separator: [
-                       "newApp", true, "newSketch", true, "newFolder", true, "newTheme", true, "newProject", true, "additions", true
+                       "openFile", true,"close", true,"save", false,"newProject", true,"newFolder", true, 
+                       "newTheme", true,"fileAction", true,"download", true,
+                       "newApp", true, "newSketch", true,  "additions", true
                    ]
                },
                {
-                   label: "Open",
-                   path: "open",
-                   id: "davinci.open",
+                   label: "Edit",
+                   path: "edit",
+                   id: "davinci.edit",
                    separator: [
-                       "openFile", true, "openTheme", true, "openOrion", true, "additions", false
+                      "xcp", true
+                   ]
+               },
+               {
+                   label: "View",
+                   path: "view",
+                   id: "davinci.view",
+                   separator: [
+                               "openTheme", true, "additions", true,  "openOrion", true
+                   ]
+               },
+               {
+                   label: "Help",
+                   path: "helpMain",
+                   id: "davinci.help",
+                  // className: 'helpMenu',
+                  // iconClass: 'helpMenuIcon',
+                  // showLabel:false,
+                   separator: [
+                       "help", true, "about", true, "additions", false
                    ]
                }
            ],
            actions: [
-                 {
-                     id: "newHTMLMobile",
-                     // icon: 'davinci/img/add.gif',
-                     run: function() {
-                         require(['./ui/Resource'], function(r) {
-                             r.newHTMLMobile();
-                         });
-                     },
-                     iconClass: "newOpenMenuItem newMobileAppMenuItem",
-                     label: "Mobile Application...",
-                     // toolbarPath: "davinci.toolbar.main/edit",
-                     menubarPath: "davinci.new/newApp"
-                 },
+              
                  {
                      id: "newHTMLDesktop",
                      // icon: 'davinci/img/add.gif',
@@ -149,10 +158,23 @@ return {
                          });
                      },
                      iconClass: "newOpenMenuItem newDesktopAppMenuItem",
-                     label: "Desktop Application...",
+                     label: "New Html (Desktop)...",
                      // toolbarPath: "davinci.toolbar.main/edit",
-                     menubarPath: "davinci.new/newApp"
+                     menubarPath: "davinci.new/newFolder"
                  },
+                 {
+                     id: "newHTMLMobile",
+                     // icon: 'davinci/img/add.gif',
+                     run: function() {
+                         require(['./ui/Resource'], function(r) {
+                             r.newHTMLMobile();
+                         });
+                     },
+                     iconClass: "newOpenMenuItem newMobileAppMenuItem",
+                     label: "New Html (Mobile)...",
+                     // toolbarPath: "davinci.toolbar.main/edit",
+                     menubarPath: "davinci.new/newFolder"
+                 },/*
                  {
                      id: "newHTMLSketchHiFi",
                      // icon: 'davinci/img/add.gif',
@@ -162,9 +184,9 @@ return {
                          });
                      },
                      iconClass: "newOpenMenuItem newSketchHiFiMenuItem",
-                     label: "Sketch (high-fidelity)...",
+                     label: "New Html File...",
                      // toolbarPath: "davinci.toolbar.main/edit",
-                     menubarPath: "davinci.new/newSketch"
+                     menubarPath: "davinci.new/newFolder"
                  },
                  {
                      id: "newHTMLSketchLoFi",
@@ -178,18 +200,7 @@ return {
                      label: "Sketch (low-fidelity)...",
                      // toolbarPath: "davinci.toolbar.main/edit",
                      menubarPath: "davinci.new/newSketch"
-                 },
-                 {
-                     id: "newFolder",
-                     run: function() {
-                     	require(['./ui/Resource'], function(r) {
-                     		r.newFolder();
-                     	});
-                     },
-                     iconClass: "newOpenMenuItem newFolderMenuItem",
-                     label: "Folder...",
-                     menubarPath: "davinci.new/newFolder"
-                 },
+                 },*/
                 {
                    id: "newCSS",
                    run: function() {
@@ -198,7 +209,7 @@ return {
                    	});
                    },
                    iconClass: "newOpenMenuItem newCSSMenuItem",
-                   label: "CSS File...",
+                   label: "New CSS ...",
                    menubarPath: "davinci.new/newFolder"
                },
                {
@@ -209,7 +220,18 @@ return {
                    	});
                    },
                    iconClass: "newOpenMenuItem newJSMenuItem",
-                   label: "JavaScript File...",
+                   label: "New JavaScript ...",
+                   menubarPath: "davinci.new/newFolder"
+               },
+               {
+                   id: "newFolder",
+                   run: function() {
+                   	require(['./ui/Resource'], function(r) {
+                   		r.newFolder();
+                   	});
+                   },
+                   iconClass: "newOpenMenuItem newFolderMenuItem",
+                   label: "New Folder...",
                    menubarPath: "davinci.new/newFolder"
                },
                {
@@ -220,7 +242,7 @@ return {
                    	});
                    },
                    iconClass: "newOpenMenuItem newThemeMenuItem",
-                   label: "Theme...",
+                   label: "New Theme...",
                    menubarPath: "davinci.new/newTheme"
                },
                {
@@ -231,7 +253,18 @@ return {
                    	});
                    },
                    iconClass: "newOpenMenuItem newProjectMenuItem",
-                   label: "Project...",
+                   label: "New Project...",
+                   menubarPath: "davinci.new/newProject"
+               },
+               {
+                   id: "switchProject",
+                   run: function() {
+                   	require(['./ui/Resource'], function(r) {
+                   		r.switchProject();
+                   	});
+                   },
+                   iconClass: "newOpenMenuItem newProjectMenuItem",
+                   label: "Switch Project...",
                    menubarPath: "davinci.new/newProject"
                },
                {
@@ -242,9 +275,9 @@ return {
                    	});
                    },
                    iconClass: "newOpenMenuItem openFileMenuItem",
-                   label: "File...",
+                   label: "Open File...",
                    toolbarPath: "davinci.toolbar.main/edit",
-                   menubarPath: "davinci.open/openFile",
+                   menubarPath: "davinci.new/openFile",
                    keyBinding: {accel: true, charOrCode: "o"}
                },
                {
@@ -256,7 +289,7 @@ return {
                    },
                    iconClass: "newOpenMenuItem openThemeMenuItem",
                    label: "Theme Editor...",
-                   menubarPath: "davinci.open/openTheme"
+                   menubarPath: "davinci.view/openTheme"
                },
                {
                    id: "openReview",
@@ -273,7 +306,7 @@ return {
                    },
                    iconClass: "newOpenMenuItem openReviewMenuItem",
                    label: "Review...",
-                   menubarPath: "davinci.open/openTheme"
+                   menubarPath: "davinci.view/openTheme"
                },
                {
                    id: "orionNavigator",
@@ -283,7 +316,197 @@ return {
                    },
                    iconClass: "newOpenMenuItem orionIcon",
                    label: "Orion Navigator",
-                   menubarPath: "davinci.open/openOrion"
+                   menubarPath: "davinci.view/openOrion"
+               },
+               {
+                   id: "closeFiles",
+                   // icon: 'davinci/img/add.gif',
+                   run: function() {
+                       require(['./ui/Resource'], function(r) {
+                           r.newHTMLDesktop();
+                       });
+                   },
+                   iconClass: "newOpenMenuItem newDesktopAppMenuItem",
+                   label: "Close...",
+                   // toolbarPath: "davinci.toolbar.main/edit",
+                   menubarPath: "davinci.new/close"
+               },
+               {
+                   id: "closeAllFiles",
+                   // icon: 'davinci/img/add.gif',
+                   run: function() {
+                       require(['./ui/Resource'], function(r) {
+                           r.newHTMLDesktop();
+                       });
+                   },
+                   iconClass: "newOpenMenuItem newDesktopAppMenuItem",
+                   label: "Close All...",
+                   // toolbarPath: "davinci.toolbar.main/edit",
+                   menubarPath: "davinci.new/close"
+               },
+               {
+                   id: "saveFiles",
+                   // icon: 'davinci/img/add.gif',
+                   run: function() {
+                       require(['./ui/Resource'], function(r) {
+                           r.newHTMLDesktop();
+                       });
+                   },
+                   iconClass: "newOpenMenuItem newDesktopAppMenuItem",
+                   label: "Save...",
+                   // toolbarPath: "davinci.toolbar.main/edit",
+                   menubarPath: "davinci.new/save"
+               },
+               {
+                   id: "saveAsFiles",
+                   // icon: 'davinci/img/add.gif',
+                   run: function() {
+                       require(['./ui/Resource'], function(r) {
+                           r.newHTMLDesktop();
+                       });
+                   },
+                   iconClass: "newOpenMenuItem newDesktopAppMenuItem",
+                   label: "Save As...",
+                   // toolbarPath: "davinci.toolbar.main/edit",
+                   menubarPath: "davinci.new/save"
+               },
+               {
+                   id: "saveAllFiles",
+                   // icon: 'davinci/img/add.gif',
+                   run: function() {
+                       require(['./ui/Resource'], function(r) {
+                           r.newHTMLDesktop();
+                       });
+                   },
+                   iconClass: "newOpenMenuItem newDesktopAppMenuItem",
+                   label: "Save All...",
+                   // toolbarPath: "davinci.toolbar.main/edit",
+                   menubarPath: "davinci.new/save"
+               }
+               ,
+               {
+                   id: "cutSection",
+                   // icon: 'davinci/img/add.gif',
+                   run: function() {
+                       require(['./ui/Resource'], function(r) {
+                           r.newHTMLDesktop();
+                       });
+                   },
+                   iconClass: "dijitEditorIcon dijitEditorIconCut",
+                   label: "Cut...",
+                   // toolbarPath: "davinci.toolbar.main/edit",
+                   menubarPath: "davinci.edit/xcp"
+               }
+               ,
+               {
+                   id: "copySection",
+                   // icon: 'davinci/img/add.gif',
+                   run: function() {
+                       require(['./ui/Resource'], function(r) {
+                           r.newHTMLDesktop();
+                       });
+                   },
+                   iconClass: "dijitEditorIcon dijitEditorIconCopy",
+                   label: "Copy...",
+                   // toolbarPath: "davinci.toolbar.main/edit",
+                   menubarPath: "davinci.edit/xcp"
+               }
+               ,
+               {
+                   id: "pasteSection",
+                   // icon: 'davinci/img/add.gif',
+                   run: function() {
+                       require(['./ui/Resource'], function(r) {
+                           r.newHTMLDesktop();
+                       });
+                   },
+                   iconClass: "dijitEditorIcon dijitEditorIconPaste",
+                   label: "Paste...",
+                   // toolbarPath: "davinci.toolbar.main/edit",
+                   menubarPath: "davinci.edit/xcp"
+               },
+               {
+                   id: "davinci.ui.deletefile",
+                   label: "Delete file...",
+                   iconClass:"FilesToolbarDeleteFileIcon",
+                   className: "FilesToolbarDeleteFile",
+                   run: function() {
+                   	require(['./ui/Resource'], function(r) {
+                   		r.deleteAction();
+                   	});
+                   },
+                   menubarPath: "davinci.new/fileAction"
+               },
+               {
+                   id: "davinci.ui.renamefile",
+                   label: "Rename file...",
+                   iconClass:"FilesToolbarRenameFileIcon",
+                   className: "FilesToolbarRenameFile",
+                   run: function() {
+                   	require(['./ui/Resource'], function(r) {
+                   		r.renameAction();
+                   	});
+                   },
+                   menubarPath: "davinci.new/fileAction"
+               },
+               {
+                   id: "davinci.ui.addFiles",
+                   label: "Upload and Extract ZIP file...",
+                   iconClass:"uploadZipIcon",
+                   className: "FilesToolbarUploadZip",
+                   run: function() {
+                   	require(['./ui/Resource'], function(r) {
+                   		r.addFilesZip();
+                   	});
+                   },
+                   isEnabled: function(item) {
+                       return !item || require('./ui/Resource').canModify(item);
+                   },
+                   menubarPath: "davinci.new/fileAction"
+               },
+               {
+                   id: "davinci.ui.addFiles2",
+                   label: "Upload files...",
+                   iconClass:"uploadIcon",
+                   className: "FilesToolbarUploadFiles",
+                   run: function() {
+                   	require(['./ui/Resource'], function(r) {
+                   		r.addFiles();
+                   	});
+                   },
+                   isEnabled: function(item) {
+                       return !item || require('./ui/Resource').canModify(item);
+                   },
+                   menubarPath: "davinci.new/fileAction"
+               },
+
+               {
+                   id: "download",
+                   iconClass: 'downloadSomeIcon',
+                   className: "FilesToolbarDownloadSelected",
+                   run: function() {
+                       require(['./Workbench', './ui/DownloadSelected'],
+                           function(workbench, DownloadSelected) {
+                           	workbench.showModal(new DownloadSelected(), "Download", {width: 440});
+                           }
+                       );
+                   },
+                   label: "Download Selected Files",
+                   menubarPath: "davinci.new/download"
+               },
+               {
+                   id: "download2",
+                   iconClass: 'downloadAllIcon',
+                   className: "FilesToolbarDownloadAll",
+                   run: function() {
+                       require(['./Workbench', './ui/Download'],
+                           function(workbench, Download) {
+                           	workbench.showModal(new Download(), "Download", {width: 440});
+                           }
+                       );
+                   },
+                   label: "Download Entire Project",
+                   menubarPath: "davinci.new/download"
                }
            ]
         },
@@ -294,8 +517,7 @@ return {
                 {
                     __mainMenu: true,
                     separator: [
-                        "usersettings", false, "settings", false, "additions", false, "help",
-                        false
+                        "usersettings", false, "settings", false, "additions", false
                     ]
                 },
                 {
@@ -318,17 +540,6 @@ return {
                     showLabel:false,
                     separator: [
                         "settings", true, "additions", false
-                    ]
-                },
-                {
-                    label: "Help",
-                    path: "help",
-                    id: "davinci.help",
-                    className: 'helpMenu',
-                    iconClass: 'helpMenuIcon',
-                    showLabel:false,
-                    separator: [
-                        "help", true, "about", false, "additions", false
                     ]
                 }
             ],
@@ -508,100 +719,7 @@ return {
             viewContribution: {
                 targetID: "workbench.Explorer",
                 actions: [
-  	                {
-	                    id: "davinci.ui.newfile",
-	                    label: "New folder...",
-	                    iconClass:"newFolderIcon",
-	                    className: "FilesToolbarNewFolder",
-	                    run: function() {
-	                    	require(['./ui/Resource'], function(r) {
-	                    		r.newFolder();
-	                    	});
-	                    },
-                        toolbarPath: "download"
-	                },
-	                {
-	                    id: "davinci.ui.deletefile",
-	                    label: "Delete file...",
-	                    iconClass:"FilesToolbarDeleteFileIcon",
-	                    className: "FilesToolbarDeleteFile",
-	                    run: function() {
-	                    	require(['./ui/Resource'], function(r) {
-	                    		r.deleteAction();
-	                    	});
-	                    },
-                        toolbarPath: "download"
-	                },
-	                {
-	                    id: "davinci.ui.renamefile",
-	                    label: "Rename file...",
-	                    iconClass:"FilesToolbarRenameFileIcon",
-	                    className: "FilesToolbarRenameFile",
-	                    run: function() {
-	                    	require(['./ui/Resource'], function(r) {
-	                    		r.renameAction();
-	                    	});
-	                    },
-                        toolbarPath: "download"
-	                },
-                    {
-                        id: "davinci.ui.addFiles",
-                        label: "Upload and Extract ZIP file...",
-                        iconClass:"uploadZipIcon",
-	                    className: "FilesToolbarUploadZip",
-                        run: function() {
-                        	require(['./ui/Resource'], function(r) {
-                        		r.addFilesZip();
-                        	});
-                        },
-                        isEnabled: function(item) {
-                            return !item || require('./ui/Resource').canModify(item);
-                        },
-                        toolbarPath: "download"
-                    },
-                    {
-                        id: "davinci.ui.addFiles",
-                        label: "Upload files...",
-                        iconClass:"uploadIcon",
-	                    className: "FilesToolbarUploadFiles",
-                        run: function() {
-                        	require(['./ui/Resource'], function(r) {
-                        		r.addFiles();
-                        	});
-                        },
-                        isEnabled: function(item) {
-                            return !item || require('./ui/Resource').canModify(item);
-                        },
-                        toolbarPath: "download"
-                    },
-                    {
-                        id: "download",
-                        iconClass: 'downloadSomeIcon',
-	                    className: "FilesToolbarDownloadSelected",
-                        run: function() {
-                            require(['./Workbench', './ui/DownloadSelected'],
-                                function(workbench, DownloadSelected) {
-                                	workbench.showModal(new DownloadSelected(), "Download", {width: 440});
-                                }
-                            );
-                        },
-                        label: "Download Selected Files",
-                        toolbarPath: "download"
-                    },
-                    {
-                        id: "download",
-                        iconClass: 'downloadAllIcon',
-	                    className: "FilesToolbarDownloadAll",
-                        run: function() {
-                            require(['./Workbench', './ui/Download'],
-                                function(workbench, Download) {
-                                	workbench.showModal(new Download(), "Download", {width: 440});
-                                }
-                            );
-                        },
-                        label: "Download Entire Project",
-                        toolbarPath: "download"
-                    }
+
                 ]
             }
         }

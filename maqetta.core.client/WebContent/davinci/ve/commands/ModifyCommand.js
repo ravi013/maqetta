@@ -109,8 +109,10 @@ return declare("davinci.ve.commands.ModifyCommand", [_hierarchyCommand], {
 		var parentWidget = widget.getParent();
 		var newWidget = null;
 		/* make sure the parent widget supports our re-childrening commands */
-
+		//debugger;
 		var index = parentWidget.indexOf(widget);
+		console.debug("parentWidget index "+index);
+		
 		parentWidget.removeChild(widget);
 		widget.destroyWidget(); 
 		newWidget = Widget.createWidget(this._newData);

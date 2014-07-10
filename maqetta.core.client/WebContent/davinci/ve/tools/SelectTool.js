@@ -55,6 +55,8 @@ return declare("davinci.ve.tools.SelectTool", tool, {
 	},
 
 	onMouseDown: function(event){
+		var node=event.target;
+		console.debug("node"+node);
 		var context = this._context;
 		if(context.isFocusNode(event.target)){
 			// Don't process mouse events on focus nodes. Focus.js already takes care of those events.
@@ -239,7 +241,7 @@ return declare("davinci.ve.tools.SelectTool", tool, {
 					this._updateMoveCursor();
 
 					// Chrome doesn't blur active focus node when switching frames, so focus on something else focusable first to cause the blur
-					document.getElementById("maqetta_project_select").focus();
+//					document.getElementById("maqetta_project_select").focus();
 					userdoc.defaultView.focus();	// Make sure the userdoc is the focus object for keyboard events
 				}
 			}
@@ -1059,7 +1061,8 @@ return declare("davinci.ve.tools.SelectTool", tool, {
 		var context = this._context,
 			selection = context.getSelection();
 		for(var i=0; i<selection.length; i++){
-			var box = context._focuses[i].getBounds();
+			var box = context._focuses && context._focuses[i] && context._focuses[i].getBounds();
+			if(box)
 			if(pageX >= box.l && pageX <= box.l + box.w &&
 					pageY >= box.t && pageY <= box.t + box.h){
 				return selection[i];

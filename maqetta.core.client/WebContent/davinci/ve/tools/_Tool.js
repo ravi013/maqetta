@@ -16,7 +16,15 @@ return declare("davinci.ve.tools._Tool", null, {
 	 * @param {object} target  A DOM node which (in almost all cases) has received a mouseover event
 	 * @param {object) event  The event object
 	 */
-	_setTarget: function(target, event){
+	_setTarget2: function(target, event){
+		//var node=event.target;
+	//	console.debug("node"+node+"target "+target);
+		var w = widget.getEnclosingWidget(target);
+		var containerNode = this._context.getContainerNode();
+	},_setTarget: function(target, event){
+		
+	//	var node=event.target;
+	//	console.debug("node"+node+"target "+target);
 		
 		if(!this._targetOverlays){
 			this._targetOverlays = [];
@@ -31,6 +39,7 @@ return declare("davinci.ve.tools._Tool", null, {
 		
 		while(target && target != containerNode){
 			w = widget.getEnclosingWidget(target);
+			
 			// Not sure when w.getContext() won't be true. Maybe that check deals with
 			// widgets that are either not completely ready or in process of being deleted?
 			// If anyone knows answer, please update this comment.

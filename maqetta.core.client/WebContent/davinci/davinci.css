@@ -381,7 +381,8 @@ html.dj_gecko body#maqBody.claro div#davinci_app.dijitBorderContainerNoGutter di
 html.dj_gecko body#maqBody.claro div#davinci_app.dijitBorderContainerNoGutter div#davinci_menubar_pane.dijitContentPane div#davinci_menu_bar.dijitMenuBar
 {
  margin-bottom: 0;
- line-height: 15px;
+  font-size: 12px;
+    line-height: 5px;
     background-color: #333333;
      background: linear-gradient(top,  #0274BE,  #025D99);
   background: -ms-linear-gradient(top,  #0274BE,  #025D99);
@@ -460,6 +461,36 @@ html.dj_gecko body#maqBody.claro div#davinci_app.dijitBorderContainerNoGutter di
 }
 #davinci_app .davinciToolbar .maqLabelButton.maqDesignButton .dijitButtonNode {
 	border-top-right-radius:0px;
+	border-bottom-right-radius:0px;
+	 padding-bottom: 7px;
+}
+#davinci_app .davinciToolbar .maqLabelButton.modeLeftButton {
+	margin-left:10px;
+	margin-right:0px;
+}
+#davinci_app .davinciToolbar .maqLabelButton.modeLeftButton .dijitButtonNode {
+	border-top-right-radius:0px;
+	border-bottom-right-radius:0px;
+	padding-bottom: 7px;
+}
+
+#davinci_app .davinciToolbar .maqLabelButton.modeRightButton {
+	margin-left:0px;
+	margin-right:10px;
+}
+#davinci_app .davinciToolbar .maqLabelButton.modeRightButton .dijitButtonNode {
+	border-top-left-radius:0px;
+	border-bottom-left-radius:0px;
+	 padding-bottom: 7px;
+}
+#davinci_app .davinciToolbar .maqLabelButton.modecentreButton {
+	margin-left: -1px;
+    margin-right: -1px;
+}
+#davinci_app .davinciToolbar .maqLabelButton.modecentreButton .dijitButtonNode {
+	border-top-left-radius:0px;
+	border-bottom-left-radius:0px;
+		border-top-right-radius:0px;
 	border-bottom-right-radius:0px;
 	 padding-bottom: 7px;
 }

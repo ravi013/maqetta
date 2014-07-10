@@ -96,6 +96,7 @@ return declare("davinci.ve._Widget", null, {
 	getChildren: function(attach) {
 		var helper = this.getHelper();
 		if (helper && helper.getChildren) {
+			console.debug("children fitched by helper");
 			return helper.getChildren(this, attach);
 		}
 
@@ -187,17 +188,22 @@ return declare("davinci.ve._Widget", null, {
 	},
 
 	addChild: function(child, index) {
+		var hhref=this._srcElement.getAttribute("href");
+		var srcElement=this.getCurrentSrcElement();
+		var children = this.getChildren();
+		console.debug("href "+hhref);	
+		
 		var containerNode = this.getContainerNode();
 		if (containerNode) {
 			// add to model (source)
 			if (index === undefined || index === null || index === -1) {
-				this._srcElement.addChild(child._srcElement);
+				srcElement.addChild(child._srcElement);
 			} else {
-				var children = this.getChildren();
+				
 				if (index < children.length) {
-					this._srcElement.insertBefore(child._srcElement,children[index]._srcElement);
+					srcElement.insertBefore(child._srcElement,children[index]._srcElement);
 				} else {
-					this._srcElement.addChild(child._srcElement);
+					srcElement.addChild(child._srcElement);
 				}
 			}
 
@@ -731,9 +737,22 @@ return declare("davinci.ve._Widget", null, {
 		}
 	},
 
+	getCurrentSrcElement:function(){
+		var hhref=this._srcElement.getAttribute("href");
+		var srcElement;	
+		console.debug("href "+hhref);
+		if(hhref && hhref!="" && this.innerSrcElement){
+			srcElement=this.innerSrcElement;
+			//children=srcElement.getChildren();
+		}else{
+			srcElement=this._srcElement;
+		}
+		return srcElement;
+	},
 	removeChild: function(/*Widget*/child) {
 		// remove from model (source)
-		this._srcElement.removeChild(child._srcElement);
+		var srcElement=this.getCurrentSrcElement();
+		srcElement.removeChild(child._srcElement);
 
 		// remove from VE DOM
 		var helper = this.getHelper();

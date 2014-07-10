@@ -765,6 +765,7 @@ return declare("davinci.ve.views.StatesView", [ViewPart], {
 		// to recreate the tree widget because the list of states or 
 		// the plugin scene managers has different data.
 		function compareProperty(o1, o2, prop){
+			
 			if((o1[prop] && !o2[prop]) || (!o1[prop] && o2[prop])){
 				return false;	// return false if objects don't match
 			}

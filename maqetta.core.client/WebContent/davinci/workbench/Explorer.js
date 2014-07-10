@@ -80,7 +80,7 @@ return declare("davinci.workbench.Explorer", ViewPart, {
 			}
 		});
 		var tree = this.tree = new imageDragTree({
-			showRoot: false,
+			showRoot: true,
 			persist: false,
 			cookieName: 'maqExplorer',
 			model: model,
@@ -173,7 +173,8 @@ return declare("davinci.workbench.Explorer", ViewPart, {
 	 * so that we can supplement the standard buttons (from ui.plugin.js) with
 	 * additional UI, particularly project-related UI.
 	 */
-	attachToolbar: function(){
+	attachToolbar: function(){}
+	,attachToolbar2: function(){
 		//FIXME: Need to move project-related UI into here.
 		this.inherited(arguments);
 		var projectRowDiv = dojo.doc.createElement("div");
@@ -291,6 +292,7 @@ return declare("davinci.workbench.Explorer", ViewPart, {
 	},
 	
 	_updateToolbarIcons: function(items){
+		/*
 		var anyReadonly = false;
 		for(var i=0; i<items.length; i++){
 			var resource = items[i].resource;
@@ -324,7 +326,7 @@ return declare("davinci.workbench.Explorer", ViewPart, {
 				domClass.remove(renameButtonNode, 'FilesToolbarRenameFileIconDisabled');
 				renameButtonWidget.set("disabled", false);
 			}
-		}
+		}*/
 	},
 	
 	_deleteProject: function(){

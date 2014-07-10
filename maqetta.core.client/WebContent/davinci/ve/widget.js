@@ -190,6 +190,7 @@ getEnclosingWidget: function(node) {
 
 getEnclosingWidgetForRichText: function(node) {
 	if (!node || !node._dvWidget){ return; }
+	
 	if (node._dvWidget.type === 'html.stickynote' || node._dvWidget.type === 'html.richtext' ){
 		return node._dvWidget;
 	} else if (node.parentNode){
@@ -390,6 +391,7 @@ byNode: function(node) {
  * @param {object} data  (Needs to be documented!)
  */
 createWidget: function(widgetData) {
+	
 	if(!widgetData || !widgetData.type){
 		return undefined;
 	}
@@ -649,7 +651,9 @@ getWidget: function(node){
 	if(!node || node.nodeType != 1){
 		return undefined;
 	}
-
+// console.trace();
+	console.debug("node "+node);
+	console.debug("node.innerSrcElement  "+node.innerSrcElement );
 	var widget = widgetObject.byNode(node);
 	if(!widget){
 		var ctor;
@@ -662,6 +666,8 @@ getWidget: function(node){
 			var d = widgetObject._dijit(node);
 			var w = d.byNode(node);
 			var widgetType = node.getAttribute("data-dojo-type") || node.getAttribute("dojotype");
+			console.debug("widgetType "+widgetType);
+			console.debug("w = "+w);
 			if (w) {
 				widget = new DijitWidget(data,node,w,null,null,widgetType);
 			} else {
@@ -678,8 +684,12 @@ getWidget: function(node){
 			}
 			widget = new HTMLWidget(data,node);
 		}
+		console.debug("dvWidgetType "+dvWidgetType);
+		if(node.innerSrcElement){
+			widget.innerSrcElement=node.innerSrcElement;
+		}
 	}
-
+	
 	return widget;
 }
 };

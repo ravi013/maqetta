@@ -27,14 +27,14 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 		this.onChange();
 	},
 
-	getText: function(context) {
+	getText: function(context,mode) {
 		context = context || {};
 		var s = "";
 		var doFormat;
 		context.indent += 2;
 		s = s + "<" + this.tag;
 		for (var i=0; i<this.attributes.length; i++) {
-			var attrtext = this.attributes[i].getText(context);
+			var attrtext = this.attributes[i].getText(context,mode);
 			// noPersist attributes return empty string
 			if (attrtext.length>0) {
 				s=s+" "+attrtext;
@@ -56,7 +56,7 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 					var isStyle = this.tag == "style";
 
 					for (var i=0; i<this.children.length; i++) {
-						s = s + this.children[i].getText(context);
+						s = s + this.children[i].getText(context,mode);
 						if (isStyle) {
 							var lines = this._fmChildLine,
 							indent = this._fmChildIndent || 0;
@@ -81,7 +81,7 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 		return s;
 	},
 
-	_formatModel: function( newElement, index, context) {
+	_formatModel: function( newElement, index, context,mode) {
 
 		var offset = 0;
 		var lfSize = 1;		// should check if 2
@@ -100,13 +100,13 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 
 		}
 
-		function formatElem(elem, context) {
+		function formatElem(elem, context,mode) {
 			elem.startOffset = offset;
 			elem.wasParsed = true;
 			offset += elem.tag.length + 2;
 			for (var i=0; i<elem.attributes.length; i++) {
 				elem.attributes[i].startOffset = offset;
-				var attrtext = elem.attributes[i].getText(context);
+				var attrtext = elem.attributes[i].getText(context,mode);
 				if (attrtext.length>0)
 					offset+=1+attrtext.length;
 				elem.attributes[i].endOffset=offset-1;
@@ -140,7 +140,7 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 						if (lastChild && lastChild.elementType != "HTMLText" && !davinci.html._noFormatElements[child.tag]) {
 							addIndent(context.indent,null, lastChild);
 						}
-						formatElem(child,context);
+						formatElem(child,context,mode);
 						break;
 					case "HTMLText":
 						child.startOffset = offset;
@@ -181,17 +181,17 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 			newElement._fmLine = 1;
 			newElement._fmIndent = (index < this.children.length) ? context.indent : context.indent-2;
 		}
-		formatElem(newElement,context);
+		formatElem(newElement,context,mode);
 		return (offset>startOffset) ? offset-startOffset : 0;
 	},
 
-	getElementText: function(context) {
+	getElementText: function(context,mode) {
 		context = context || {};
 		var s = "" ;
 		if (this.children.length > 0) {
 			for (var i=0; i<this.children.length; i++)
 				if (this.children[i].elementType!="HTMLComment") {
-					s=s+this.children[i].getText(context);
+					s=s+this.children[i].getText(context,mode);
 				}
 		} else if (this.script) {
 			return this.script;
@@ -209,17 +209,23 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 			if (this.children[i].tag == tagName) {
 				result.push(this.children[i]);
 			}
-			if (recurse && this.children[i].elementType == "HTMLElement") {
+			if (recurse && (this.children[i].elementType == "HTMLElement" || 
+					this.children[i].elementType == "HTMLFile"||
+					this.children[i].elementType == "HTMLImport")) {
 				this.children[i].getChildElements(tagName, recurse, result);
 			}
 		}
 		return result;
 	},
 
-	getChildElement: function(tagName) {
+	getChildElement: function(tagName, recurse) {
+		
 		for (var i=0; i<this.children.length; i++)
+			{			
 			if (this.children[i].tag == tagName) {
+				console.debug("found "+tagName);
 				return this.children[i];
+			}
 			}
 		return this;
 	},
@@ -332,7 +338,7 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 				id = file.uniqueIDs[this.tag]=0;
 			} else
 				id = ++file.uniqueIDs[this.tag];
-			this.addAttribute("id", this.tag+"_"+id,noPersist);	 
+			this.addAttribute("id", file.fileName+"_"+this.tag+"_"+id,noPersist);	 
 		}
 	},
 
@@ -342,7 +348,9 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 			return this;
 		}
 		for (var i=0; i<this.children.length; i++) {
-			if (this.children[i].elementType == "HTMLElement") {
+			if (this.children[i].elementType == "HTMLElement"
+				||this.children[i].elementType == "HTMLImport"
+					||this.children[i].elementType == "HTMLFile") {
 				var found = this.children[i].findElement(id);
 				if (found) {
 					return found;
@@ -361,6 +369,7 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 	},
 
 	addChild: function(newChild,index, fromParser) {
+		
 		if (!fromParser && this.wasParsed) {
 			if (newChild.elementType == 'HTMLElement') {
 				// calculate indent
@@ -381,7 +390,7 @@ return declare("davinci.html.HTMLElement", HTMLItem, {
 				}
 				var indent = childIndent;
 				var context = {indent:indent};
-				var delta = this._formatModel(newChild,index, context);
+				var delta = this._formatModel(newChild,index, context,2);
 
 				this.getHTMLFile().updatePositions(newChild.startOffset, delta);
 

@@ -517,6 +517,15 @@ var uiResource = {
 					}, newHtmlParams);
 				});
 			}
+		},
+		switchProject: function(){
+			var projectSelection = new davinci.ui.widgets.ProjectToolbar({});
+			var switchProjectDialog = new Dialog({
+			        title: "Switch Project",
+			        content: projectSelection.domNode,
+			        style: "width: 300px"
+			    });
+			switchProjectDialog.show();
 		}
 
 	};

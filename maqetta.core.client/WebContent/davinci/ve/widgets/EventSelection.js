@@ -259,7 +259,8 @@ var EventSelection = declare("davinci.ve.widgets.EventSelection", [ViewLite], {
 					value = widget.properties[name];
 				}else {
 					/* check the model for the events value */
-					value = widget._srcElement.getAttribute(name);
+					var srcElement=widget._srcElement?widget._srcElement:widget.innerSrcElement;
+					value = srcElement.getAttribute(name);
 				}
 				value = getValueFromEventScript(value);
 				var box = dijit.byId(this.pageTemplate[i].id);

@@ -5,6 +5,7 @@
  */
 define([
 	"dojo/_base/declare",
+	"dojo/Deferred",
 	"davinci/html/HTMLItem",
 	"davinci/html/HTMLParser",
 	"davinci/html/CSSSelector",
@@ -12,8 +13,9 @@ define([
 	"davinci/html/CSSImport",
 	"davinci/html/CSSFile",
 	"davinci/model/Model",
-	"davinci/model/Path"
-], function(declare, HTMLItem, HTMLParser, CSSSelector, HTMLElement, CSSImport, CSSFile, Model, Path) {
+	"davinci/model/Path",
+	"system/resource"
+], function(declare, Deferred,HTMLItem, HTMLParser, CSSSelector, HTMLElement, CSSImport, CSSFile, Model, Path,systemResource) {
 
 return declare("davinci.html.HTMLFile", HTMLItem, {
 
@@ -23,6 +25,10 @@ return declare("davinci.html.HTMLFile", HTMLItem, {
 		this.elementType = "HTMLFile";
 		this._loadedCSS = {};
 		this._styleElem = null;
+		this.IsLoaded=false;
+		console.debug("create new html file");
+		console.trace();
+	//	this.load();
 	},
 
 	save: function (isWorkingCopy) {
@@ -34,7 +40,21 @@ return declare("davinci.html.HTMLFile", HTMLItem, {
 		}
 		return deferred;
 	},
-
+	load: function(includeImports) {
+		var deferred=new Deferred();
+		if(this.IsLoaded){
+			return;
+		}
+		systemResource.findResourceAsync(this.url).then(function(file) {
+			file.getContent().then(function(txt) {
+				this.setText(txt);		
+				this.IsLoaded=true;
+				deferred.resolve(true);
+			}.bind(this));
+			this.setDirty(file.isDirty());
+		}.bind(this));
+		return deferred;
+	},
 	getText: function(context) {
 		context = context || {};
 		context.indent = 0;
@@ -64,7 +84,47 @@ return declare("davinci.html.HTMLFile", HTMLItem, {
 			return documentElement.findElement(id);
 		}
 	},
-
+	getChildElements: function(tagName, recurse, result) {
+		result = result || [];
+		for (var i=0; i<this.children.length; i++) {
+			if (this.children[i].tag == tagName) {
+				result.push(this.children[i]);
+			}
+			if (recurse && (this.children[i].elementType == "HTMLElement" || 
+					this.children[i].elementType == "HTMLFile"||
+					this.children[i].elementType == "HTMLImport")) {
+				this.children[i].getChildElements(tagName, recurse, result);
+			}
+		}
+		return result;
+	},
+	getChildElement: function(tagName, recurse) {
+		for (var i=0; i<this.children.length; i++)
+			{
+			if (this.children[i].tag == tagName) {
+				console.debug("found "+tagName);
+				return this.children[i];
+			}
+			}
+		return this;
+	},
+	getElementText: function(context) {
+		context = context || {};
+		var s = "" ;
+		if (this.children.length > 0) {
+			for (var i=0; i<this.children.length; i++)
+				if (this.children[i].elementType!="HTMLComment") {
+					s=s+this.children[i].getText(context);
+				}
+		} else if (this.script) {
+			return this.script;
+		}else if (this.statements) {
+			for (var i=0;i<this.statements.length; i++) {
+				s = s + this.statements[i].printStatement(context, this.statements[i]);
+			}
+		}
+		return s;
+	},
 	getMatchingRules: function(domElement, returnMatchLevels) {
 
 		var visitor = {
@@ -139,7 +199,7 @@ return declare("davinci.html.HTMLFile", HTMLItem, {
 
 		var result = HTMLParser.parse(text || "", this);
 		var formattedHTML = "";
-		if (!noImport && result.errors.length == 0) {
+		if (!noImport && result.errors.length > 0) {
 			// the input html may have extraneous whitespace which is thrown away by our formatting
 			// reparse the html on the source as formatted by us, so positions are correct
 			formattedHTML = this.getText();
@@ -160,12 +220,19 @@ return declare("davinci.html.HTMLFile", HTMLItem, {
 							dojo.connect(node.cssFile, 'onChange', null, dojo.hitch(htmlmodel,
 							'onChange'));
 						}
+					}else if (node.elementType == "HTMLImport") {
+						if (!node.htmlFile) {
+							node.load(true);
+							dojo.connect(node.htmlFile, 'onChange', null, dojo.hitch(htmlmodel,
+							'onChange'));
+						}
 					}
 
 				}
 			});
 		}
 		this.onChange();
+		this.IsLoaded=true;
 	},  
 
 	hasStyleSheet: function (url) {

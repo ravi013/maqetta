@@ -37,13 +37,16 @@ ContentPaneHelper.prototype = {
 			// summary:
 			//		Overriden to only return the container node if this is not a href ContentPane
 			//
+
 			if(!widget){
 				return undefined;
 			}
-			widget = widget.dijitWidget;
-
+			if(widget.dijitWidget)
+			{
+				widget = widget.dijitWidget;
+			}
 			// FIXME: should use davinci.ve.widget.getProperty(widget, "href") to get the href?
-			if(widget.href){
+			if( widget.href){
 				return undefined;
 			}
 			return widget.containerNode || widget.domNode;
