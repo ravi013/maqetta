@@ -69,7 +69,25 @@ return declare("davinci.ve.actions._ManageStatesWidget", [_WidgetBase, _Template
 			return;
 		}
 		var rootNode = context.rootNode;
+		var selectedWidgetsDiv = this.domNode.querySelector('.selectedWidgets');
 		var manageStatesStatesListDiv = this.domNode.querySelector('.manageStatesStatesListDiv');
+		
+		var widgets = this._getAllEffectedWidgets();
+		var widgetsSelectedStr="";
+		for(var i=0; i<widgets.length; i++){
+			
+			widgetsSelectedStr=widgetsSelectedStr+widgets[i].id+"("+widgets[i].type+"),";
+		}
+		var isDynamicView=false;
+		if(widgets.length==1){
+			if(widgets[0].type =="dijit/layout/ContentPane"){
+				isDynamicView=true;
+			}
+		}
+		widgetsSelectedStr=widgetsSelectedStr+" isDynamicView:"+isDynamicView;
+		console.debug("widget ="+widgetsSelectedStr);
+		domConstruct.create('span', {'class':'manageStatesStateNameCell', innerHTML:widgetsSelectedStr}, selectedWidgetsDiv);
+		
 		if(manageStatesStatesListDiv){
 			//Get list of all states (and corresponding stateContainers) in the doc
 			var obj = this._getAllStatesInDoc();
