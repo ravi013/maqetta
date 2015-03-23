@@ -60,7 +60,7 @@ lastMapTag=${mapsTagTag}
 	
 	<!-- git submodules update for the maqetta repo -->
 	<target name="cloneMaqetta">
-			<property name='gitRepoFolder' value="${base}/gitClones/git___github_com_ravi013_maqetta_git"/>
+			<property name='gitRepoFolder' value="${base}/gitClones/git___github_com_ravi013_weblabs_git"/>
 			<echo message="Fetching and Updating git submodule in ${gitRepoFolder}"/>
 			<delete quiet="true">
 			<dirset dir="${gitRepoFolder}" />
@@ -68,7 +68,7 @@ lastMapTag=${mapsTagTag}
 		 <mkdir dir="${gitRepoFolder}"/>
 		 <exec executable = "git" dir = "${gitRepoFolder}">
 			<arg value = "clone" />
-			<arg value = "git://github.com/ravi013/maqetta.git" />
+			<arg value = "git://github.com/ravi013/weblabs.git" />
 		 	<arg value = "${gitRepoFolder}" />
 		 </exec>
 		  <exec executable = "git" dir = "${gitRepoFolder}">
@@ -94,6 +94,7 @@ lastMapTag=${mapsTagTag}
 	         not "include" it -->
 		
 		<echo message="Mirror from ${emfRepoURL} to ${localRepoLocation}" />
+		<echo message="Mirror file:${localRepoLocation}" />
 		<p2.mirror destination="file:${localRepoLocation}" ignoreerrors="true">
 			<source location="${emfRepoURL}" />
 			<slicingOptions includeOptional="false" includeNonGreedy="false" latestVersionOnly="true" followStrict="true" />

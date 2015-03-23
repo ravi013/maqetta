@@ -8,7 +8,7 @@ rem Path to parent directory of the eclipse application directory.
 rem That is, if eclipse is installed in '/usr/local/eclipse', this property
 rem would be set as 'base="/usr/local"'. No trailing backslash.
 rem
-set base=D:\MyDEvtools\eclipse-orion-2.0-win32.win32.x86_64
+set base=D:\MyDEvtools\eclipse.platform.releng.basebuilder-R38M6PlusRC3D
 
 rem
 rem Path to eclipse directory inclusive. The application directory is
@@ -22,18 +22,18 @@ rem Version number of the launcher jar file. See %baseLocation%\plugins\org.ecli
 rem The launcher version is the set of alphanumeric characters between 'launcher_' and the '.' character
 rem before the 'jar' file name suffix.
 rem
-set launcherVersion=1.3.0.v20120522-1813
+set launcherVersion=1.3.0.v20111107-1631
 
 rem
 rem Directory in which to do the build. No trailing backslash.
 rem
-set MAQETTA_BUILD_DIR=c:\build-out
+set MAQETTA_BUILD_DIR=D:\MyProjects\maqetta\build
 
 rem
 rem Directory containing build.xml (this should not have to be changed in most cases).
 rem No trailing backslash.
 rem
-set relEngDir=%MAQETTA_BUILD_DIR%\repository\maqetta\releng\davinci.releng"
+set relEngDir=%MAQETTA_BUILD_DIR%\repository\weblabs\releng\davinci.releng"
 
 rem
 rem If 'maqettaCode' is set, copy files from your local workspace instead of GitHub repository
@@ -45,7 +45,7 @@ rem set maqettaCode=c:\your\local\eclipse\workspace
 rem
 rem GitHub URL for Maqetta repository. This should not change.
 rem
-set gitRepository=https://github.com/ravi013/maqetta.git
+set gitRepository=https://github.com/ravi013/weblabs.git
 
 rem
 rem Windowing System, Operating System and processor Architecture settings
@@ -68,9 +68,9 @@ IF NOT EXIST %MAQETTA_BUILD_DIR%\repository (
 rem
 rem If '.git' directory exists we need only pull
 rem
-IF EXIST %MAQETTA_BUILD_DIR%\repository\maqetta\.git (
+IF EXIST %MAQETTA_BUILD_DIR%\repository\weblabs\.git (
     rem "Doing 'git pull'..."
-    cd %MAQETTA_BUILD_DIR%\repository\maqetta
+    cd %MAQETTA_BUILD_DIR%\repository\weblabs
     git pull
 ) ELSE (
     rem "Cloning repository. This may take a few moments..."
@@ -79,7 +79,7 @@ IF EXIST %MAQETTA_BUILD_DIR%\repository\maqetta\.git (
 )
 
 rem "Initializing and updating submodules..."
-cd %MAQETTA_BUILD_DIR%\repository\maqetta
+cd %MAQETTA_BUILD_DIR%\repository\weblabs
 git submodule update --init --recursive
 
 rem
@@ -90,4 +90,4 @@ rem       running the build from this directory *imperative*.
 rem
 cd %MAQETTA_BUILD_DIR%
 
-java -jar %baseLocation%\plugins\org.eclipse.equinox.launcher_%launcherVersion%.jar -application org.eclipse.ant.core.antRunner -buildfile %relEngDir%\buildAll.xml
+java -Ddeployment-type=internal -DbuilderDir=D:\MyProjects\maqetta\releng\davinci.releng\orion\builder -Dtimestamp=20150323 -DbuildDirectory=D:\MyProjects\maqetta\build -jar %baseLocation%\plugins\org.eclipse.equinox.launcher_%launcherVersion%.jar -application org.eclipse.ant.core.antRunner -buildfile %relEngDir%\buildAll.xml 
