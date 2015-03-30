@@ -27,7 +27,7 @@ return declare("davinci.html.HTMLFile", HTMLItem, {
 		this._styleElem = null;
 		this.IsLoaded=false;
 		console.debug("create new html file");
-		console.trace();
+		
 	//	this.load();
 	},
 

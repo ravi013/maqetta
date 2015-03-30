@@ -299,7 +299,7 @@ var VisualEditor = declare("davinci.ve.VisualEditor",  null,  {
 //			this._handles.push(dojo.connect(this.context, "onSelectionChange",this, this.onContentChange));
 		
 			this.title = dojo.doc.title;
-
+			console.debug("_setSource");
 			this.context._setSource(content, this._connectCallback, this, newHtmlParams);
 	   		// set flow layout on user prefs
 			this.context.getFlowLayout(); // gets the current layout, but also sets to default if missing..
@@ -310,6 +310,7 @@ var VisualEditor = declare("davinci.ve.VisualEditor",  null,  {
 	},
 
 	_connectCallback: function(failureInfo) {
+		console.debug("Connect call back");
 		try {
 			if (failureInfo instanceof Error) {
 				throw failureInfo;

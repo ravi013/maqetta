@@ -644,7 +644,7 @@ return declare("davinci.ve.palette.Palette", [WidgetBase, _KeyNavContainer], {
 	
 	_filter: function() {
 		var context = Runtime.currentEditor.getContext();
-		var comptype = context.getCompType();
+		var comptype = context &&  context.getCompType();
 		var editorPrefs = Preferences.getPreferences('davinci.ve.editorPrefs', Workbench.getProject());
 		if(editorPrefs.showAllWidgets){
 			comptype = (comptype == 'mobile') ? "$ALLMOBILE" : "$ALLDESKTOP";

@@ -1526,7 +1526,7 @@ return declare("davinci.ve.Context", [ThemeModifier], {
 	 * Process dojoType, oawidget and dvwidget attributes on text content for containerNode
 	 */
 	_processWidgets: function(containerNode, attachWidgets, states, scripts,htmlFile) {
-		console.trace();
+	
 		var prereqs = [];		
 		var deferred2=new Deferred();
 		this._loadFileDojoTypesCache = {};

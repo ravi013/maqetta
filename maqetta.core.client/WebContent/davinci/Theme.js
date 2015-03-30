@@ -199,7 +199,7 @@ define([
 
 	    themeSet =  {
             name: this.none_themeset_name,
-            desktopTheme: context ? desktopTheme.name : 'claro',
+            desktopTheme: context ? desktopTheme && desktopTheme.name : 'claro',
             mobileTheme: mobileTheme
         };
 	    dojoThemeSets.themeSets.push(themeSet);
