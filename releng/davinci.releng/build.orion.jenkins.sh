@@ -1,6 +1,6 @@
 #! /bin/sh
 #
-# Orion/Maqetta build script. 
+# Orion/weblabs build script. 
 #
 
 #################### ORION BUILD START #############################
@@ -16,14 +16,14 @@ setProperties () {
 	#
 	# GitHub read-only URL for Maqetta repository. This should not change.
 	#
-	export gitRepository="${GIT_PROTOCOL}://github.com/ravi013/maqetta.git"
+	export gitRepository="${GIT_PROTOCOL}://github.com/ravi013/weblabs.git"
 	
 	#
 	# Directory in which to do the build. No trailing slash.
 	#
 	if [ -z ${MAQETTA_BUILD_DIR} ]
 	then
-	    export MAQETTA_BUILD_DIR="/tmp/maqetta-build"
+	    export MAQETTA_BUILD_DIR="/tmp/weblabs-build"
 	fi
 	
 	if [ -z ${MAQETTA_BUILD_DIR} ]
@@ -42,12 +42,12 @@ setProperties () {
 	#
 	# Note: This build feature SHOULD NOT be used for production builds.
 	#
-	# export maqettaCode="/Users/childsb/dev/git/maqetta"
+	# export maqettaCode="/Users/childsb/dev/git/weblabs"
 	#
 	# Directory containing build.xml (this should not have to be changed in most cases).
 	# No trailing slash.
 	#
-	export relEngDir="${MAQETTA_BUILD_DIR}/repository/maqetta/releng/davinci.releng"
+	export relEngDir="${MAQETTA_BUILD_DIR}/repository/weblabs/releng/davinci.releng"
 	
 	
 	#
@@ -128,10 +128,10 @@ populateGit(){
 	    #
 	    # If '.git' directory exists we need only pull
 	    #
-	    if [ -d ${MAQETTA_BUILD_DIR}/repository/maqetta/.git ]
+	    if [ -d ${MAQETTA_BUILD_DIR}/repository/weblabs/.git ]
 	    then
 	        echo "Doing 'git pull'..."
-	        cd ${MAQETTA_BUILD_DIR}/repository/maqetta
+	        cd ${MAQETTA_BUILD_DIR}/repository/weblabs
 	        git pull
 	    else
 	        echo "Cloning repository. This may take a few moments..."
@@ -143,19 +143,19 @@ populateGit(){
 	    then
 	    	echo ""
 	    	echo "Switching to tag ${externalTag}"
-	    	cd ${MAQETTA_BUILD_DIR}/repository/maqetta
+	    	cd ${MAQETTA_BUILD_DIR}/repository/weblabs
 	    	git checkout --force ${externalTag}
 	    fi
 	    #
 	    # Save repository revision level for later referrence
 	    #
-	    cd ${MAQETTA_BUILD_DIR}/repository/maqetta
+	    cd ${MAQETTA_BUILD_DIR}/repository/weblabs
 	    git log -1 | head -1 >${MAQETTA_BUILD_DIR}/build.level
 	else
-	    if [ ! -e ${MAQETTA_BUILD_DIR}/repository/maqetta ]
+	    if [ ! -e ${MAQETTA_BUILD_DIR}/repository/weblabs ]
 	    then
 	        #
-	        # Create symlink to 'maqettaCode' repo at ${MAQETTA_BUILD_DIR}/repository/maqetta -- Eclipse
+	        # Create symlink to 'maqettaCode' repo at ${MAQETTA_BUILD_DIR}/repository/weblabs -- Eclipse
 	        # build system requires that.
 	        #
 	        if [ ! -d ${MAQETTA_BUILD_DIR}/repository ]
@@ -211,7 +211,7 @@ tagRepositories() {
 		cd $writableBuildRoot/gitClones/org.eclipse.orion.server
 		git pull
 	
-		cd $writableBuildRoot/repository/maqetta
+		cd $writableBuildRoot/repository/weblabs
 		git pull
 
 		cd $writableBuildRoot/gitClones
