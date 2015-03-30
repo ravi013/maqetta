@@ -68,7 +68,7 @@ lastMapTag=${mapsTagTag}
 		 <mkdir dir="${gitRepoFolder}"/>
 		 <exec executable = "git" dir = "${gitRepoFolder}">
 			<arg value = "clone" />
-			<arg value = "git://github.com/ravi013/maqetta.git" />
+			<arg value = "git://github.com/ravi013/weblabs.git" />
 		 	<arg value = "${gitRepoFolder}" />
 		 </exec>
 		  <exec executable = "git" dir = "${gitRepoFolder}">
@@ -94,6 +94,7 @@ lastMapTag=${mapsTagTag}
 	         not "include" it -->
 		
 		<echo message="Mirror from ${emfRepoURL} to ${localRepoLocation}" />
+		<echo message="Mirror file:${localRepoLocation}" />
 		<p2.mirror destination="file:${localRepoLocation}" ignoreerrors="true">
 			<source location="${emfRepoURL}" />
 			<slicingOptions includeOptional="false" includeNonGreedy="false" latestVersionOnly="true" followStrict="true" />

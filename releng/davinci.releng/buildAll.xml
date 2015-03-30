@@ -1,4 +1,4 @@
-<project name="maqetta" default="nightly">
+<project name="weblabs" default="nightly">
 	
 	<!--  This line loads either internal.xml or external.xml.  These files copy the deps from the git repos.
 	      The git repos are initialized in the shell script prior to running the build script.
@@ -60,7 +60,7 @@
         <mkdir dir="${buildDirectory}/plugins"/>
         <mkdir dir="${buildDirectory}/features"/>
 
-    	<property name="repoName" value="maqetta" />
+    	<property name="repoName" value="weblabs" />
     	<property name="repoNameInternal" value="${repoName}_internal"/>
     	<property name="repoPath" value="${buildDirectory}/repository/${repoName}"/>
         <property name="repoPathInternal" value="${buildDirectory}/repository/${repoNameInternal}"/>

@@ -31,7 +31,6 @@
         <!-- LIST OF MAQETTA Internal PROJECTS GOES HERE -->
         <!-- -->
         <populateDir project="maqetta.core.server"/>
-    	<populateDir project="maqetta.core.server.standalone"/>
     	<populateDir project="maqetta.core.client"/>
         <populateDir project="davinci.product" extPath="/releng/" isFeature="true"/>
         <populateDir project="davinci.product" extPath="/releng/" />
@@ -114,6 +113,8 @@
         <defaultexcludes remove="**/.git/**"/>
         <defaultexcludes remove="**/.svn"/>
         <defaultexcludes remove="**/.svn/**"/>
+         <echo message="echo path ${buildDirectory}/${pluginDir}/${project}" />
+          <echo message="echo source ${maqettaSource}${extPath}/${project}" />
         <copy todir="${buildDirectory}/${pluginDir}/${project}">
             <fileset dir="${maqettaSource}${extPath}/${project}"/>
         </copy>
@@ -126,10 +127,13 @@
         <condition property="maqettaRepository" value="${repoPath}" else="${repoPathInternal}">
             <isfalse value="${isInternal}"/>
         </condition>
+        <echo message="echo path ${buildDirectory}/${pluginDir}/${project}" />
+        <echo message="echo source ${maqettaRepository}${extPath}/${project}" />
         <defaultexcludes remove="**/.git"/>
         <defaultexcludes remove="**/.git/**"/>
         <defaultexcludes remove="**/.svn"/>
         <defaultexcludes remove="**/.svn/**"/>
+
         <copy todir="${buildDirectory}/${pluginDir}/${project}">
             <fileset dir="${maqettaRepository}${extPath}/${project}"/>
         </copy>
