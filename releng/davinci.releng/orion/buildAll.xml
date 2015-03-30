@@ -110,9 +110,9 @@
 		 	<property name="product" value="${builder}/maqettaOrion.product"/>
 		 	<property name="run.dojo.build" value="${run.dojo.build}"/>
 		 	<property name="dojo.cache.directory" value="${dojo.cache.directory}"/>
-		 	<property name="basedir" value="${buildDirectory}/repository/maqetta/releng/davinci.releng/orion/builder" />
-			<property name="scriptDir" value="${buildDirectory}/repository/maqetta/releng/davinci.releng/orion/builder" />
-			<property name="archiveNamePrefix" value="maqetta-orion-${buildLabel}"/>
+		 	<property name="basedir" value="${buildDirectory}/repository/weblabs/releng/davinci.releng/orion/builder" />
+			<property name="scriptDir" value="${buildDirectory}/repository/weblabs/releng/davinci.releng/orion/builder" />
+			<property name="archiveNamePrefix" value="weblabs-orion-${buildLabel}"/>
 		 </ant>
     </target>
 
@@ -155,9 +155,9 @@
 			<property name="product" value="${builder}/maqettaOrionHosted.product"/>
 			<property name="run.dojo.build" value="${run.dojo.build}"/>
 			<property name="dojo.cache.directory" value="${dojo.cache.directory}"/>
-			<property name="basedir" value="${buildDirectory}/repository/maqetta/releng/davinci.releng/orion/builder" />
-			<property name="scriptDir" value="${buildDirectory}/repository/maqetta/releng/davinci.releng/orion/builder" />
-			<property name="archiveNamePrefix" value="maqetta-orion-hosted-${buildLabel}"/>
+			<property name="basedir" value="${buildDirectory}/repository/weblabs/releng/davinci.releng/orion/builder" />
+			<property name="scriptDir" value="${buildDirectory}/repository/weblabs/releng/davinci.releng/orion/builder" />
+			<property name="archiveNamePrefix" value="weblabs-orion-hosted-${buildLabel}"/>
 		</ant>
     </target>
 
